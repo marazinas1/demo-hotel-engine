@@ -116,6 +116,26 @@ function money(v: unknown) {
   return n.toFixed(2).replace(".", ",");
 }
 
+/** „Miegamasis 1 (didelė dvigulė lova), Svetainė (miegamoji sofa)“ */
+function formatRoomNames(rooms: unknown): string {
+  const configs = (rooms as { configs?: Array<{ kind?: string; beds?: number; bedType?: string }> } | null)
+    ?.configs;
+  if (!Array.isArray(configs) || configs.length === 0) return "";
+  const kindLabel = new Map(ROOM_KINDS.map((r) => [r.value as string, r.label]));
+  const bedLabel = new Map(BED_TYPES.map((b) => [b.value as string, b.label]));
+  return configs
+    .map((c) => {
+      const name = kindLabel.get(String(c.kind ?? "")) ?? String(c.kind ?? "");
+      if (!name) return "";
+      const bed = bedLabel.get(String(c.bedType ?? ""));
+      const beds = Number(c.beds) || 0;
+      const detail = bed ? `${beds > 1 ? `${beds} × ` : ""}${bed.toLowerCase()}` : "";
+      return detail ? `${name} (${detail})` : name;
+    })
+    .filter(Boolean)
+    .join(", ");
+}
+
 export function renderTokens(text: string, tokens: Record<string, string>) {
   return Object.entries(tokens).reduce((acc, [token, value]) => acc.split(token).join(value), text ?? "");
 }
