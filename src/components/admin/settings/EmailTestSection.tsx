@@ -73,8 +73,8 @@ export function EmailTestSection({ canEdit }: { canEdit: boolean }) {
               {diag?.usesFallbackFrom && " (naudojamas testinis Resend adresas — laiškai pasiekia tik paskyros savininką)"}
             </div>
             <div>
-              Raktai: {diag?.hasResendKey ? "RESEND_API_KEY ✓" : "RESEND_API_KEY ✗"} ·{" "}
-              {diag?.hasLovableKey ? "LOVABLE_API_KEY ✓" : "LOVABLE_API_KEY ✗"}
+              {diag?.hasResendKey ? "Resend_API ✓" : "Resend_API ✗"}{" "}
+              {diag?.hasLovableKey ? "Projekto_API ✓" : "Projekto_API ✗"}
             </div>
           </div>
         )}
