@@ -1,8 +1,13 @@
 import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { Loader2, Receipt } from "lucide-react";
+import { toast } from "sonner";
 import { listAllProperties } from "@/lib/properties.functions";
 import { getBooking, updateBooking } from "@/lib/bookings.functions";
+import { getInvoiceForBooking, ensureInvoiceForBooking } from "@/lib/invoices.functions";
+import { InvoiceViewerDialog, type InvoiceRow } from "@/components/admin/InvoiceViewerDialog";
+import { Button } from "@/components/ui/button";
 import {
   BookingForm,
   defaultBookingForm,
@@ -18,12 +23,31 @@ function EditBookingPage() {
   const fetchOne = useServerFn(getBooking);
   const fetchProps = useServerFn(listAllProperties);
   const update = useServerFn(updateBooking);
+  const fetchInvoice = useServerFn(getInvoiceForBooking);
+  const ensureInvoice = useServerFn(ensureInvoiceForBooking);
+  const qc = useQueryClient();
   const navigate = useNavigate();
 
   const { data: props = [] } = useQuery({ queryKey: ["admin-props"], queryFn: () => fetchProps() });
   const { data: booking, isLoading } = useQuery({
     queryKey: ["admin-booking", id],
     queryFn: () => fetchOne({ data: { id } }),
+  });
+
+  const { data: invoice } = useQuery({
+    queryKey: ["admin-invoice", id],
+    queryFn: () => fetchInvoice({ data: { bookingId: id } }),
+    enabled: Boolean(booking),
+  });
+
+  const generateInvoice = useMutation({
+    mutationFn: () => ensureInvoice({ data: { bookingId: id } }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-invoice", id] });
+      toast.success("Sąskaita sugeneruota.");
+    },
+    onError: (e) =>
+      toast.error(e instanceof Error ? e.message : "Nepavyko sugeneruoti sąskaitos."),
   });
 
   const m = useMutation({
@@ -72,6 +96,29 @@ function EditBookingPage() {
   return (
     <div>
       <h1 className="mb-4 text-2xl font-semibold">Rezervacija {booking.booking_number}</h1>
+      <div className="mb-4">
+        {invoice ? (
+          <InvoiceViewerDialog invoice={invoice as unknown as InvoiceRow} />
+        ) : booking.status === "confirmed" ? (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => generateInvoice.mutate()}
+            disabled={generateInvoice.isPending}
+          >
+            {generateInvoice.isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Receipt className="mr-2 h-4 w-4" />
+            )}
+            Generuoti sąskaitą
+          </Button>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Sąskaita bus sugeneruota automatiškai, kai rezervacija taps „Apmokėta“.
+          </p>
+        )}
+      </div>
       <BookingForm
         properties={props}
         initial={initial}
