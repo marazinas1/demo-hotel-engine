@@ -226,13 +226,13 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
   type Col = { key: string; label: string; x: number; align: "left" | "right"; maxWidth?: number };
   const cols: Col[] = data.isVatInvoice
     ? [
-        { key: "name", label: "Pavadinimas", x: marginX, align: "left", maxWidth: 46 },
-        { key: "qty", label: "Kiekis", x: 82, align: "right" },
-        { key: "unit", label: "Matas", x: 86, align: "left", maxWidth: 14 },
-        { key: "unitPriceNet", label: "Kaina be PVM", x: 118, align: "right" },
-        { key: "lineNet", label: "Suma be PVM", x: 140, align: "right" },
-        { key: "lineVat", label: "PVM suma", x: 158, align: "right" },
-        { key: "vatRate", label: "PVM %", x: 170, align: "right" },
+        { key: "name", label: "Pavadinimas", x: marginX, align: "left", maxWidth: 58 },
+        { key: "qty", label: "Kiekis", x: 88, align: "right" },
+        { key: "unit", label: "Matas", x: 92, align: "left", maxWidth: 14 },
+        { key: "unitPriceNet", label: "Kaina be PVM", x: 128, align: "right" },
+        { key: "lineNet", label: "Suma be PVM", x: 152, align: "right" },
+        { key: "lineVat", label: "PVM suma", x: 170, align: "right" },
+        { key: "vatRate", label: "PVM %", x: 181, align: "right" },
         { key: "lineTotal", label: "Iš viso", x: rightEdge, align: "right" },
       ]
     : [
