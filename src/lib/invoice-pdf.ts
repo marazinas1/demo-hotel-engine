@@ -307,16 +307,16 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
 
   doc.setFontSize(9);
   doc.text(`Suma be PVM${data.isVatInvoice ? ` (${data.vatRate}%)` : ""}`, rightEdge - 42, y, { align: "right" });
-  doc.text(`${money(data.subtotalNet)} ${data.currency}`, rightEdge, y, { align: "right" });
+  doc.text(`${money(data.subtotalNet)} ${sym}`, rightEdge, y, { align: "right" });
   y += 6;
   if (data.isVatInvoice) {
     doc.text(`PVM (${data.vatRate}%)`, rightEdge - 42, y, { align: "right" });
-    doc.text(`${money(data.vatAmount)} ${data.currency}`, rightEdge, y, { align: "right" });
+    doc.text(`${money(data.vatAmount)} ${sym}`, rightEdge, y, { align: "right" });
     y += 6;
   }
   doc.setFont(font, "bold");
   doc.text("Bendra suma", rightEdge - 42, y, { align: "right" });
-  doc.text(`${money(data.total)} ${data.currency}`, rightEdge, y, { align: "right" });
+  doc.text(`${money(data.total)} ${sym}`, rightEdge, y, { align: "right" });
   doc.setFont(font, "normal");
   y += 12;
 
