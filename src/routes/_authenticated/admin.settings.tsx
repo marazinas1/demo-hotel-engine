@@ -20,6 +20,7 @@ import {
   type IntegrationCard,
 } from "@/components/admin/settings/IntegrationsSection";
 import { ApiAccessSection } from "@/components/admin/settings/ApiAccessSection";
+import { EmailTestSection } from "@/components/admin/settings/EmailTestSection";
 import { UsersSection } from "@/components/admin/settings/UsersSection";
 export const Route = createFileRoute("/_authenticated/admin/settings")({
   component: PropertySettingsPage,
@@ -215,7 +216,10 @@ function PropertySettingsPage() {
             ) : active === "api" ? (
               <ApiAccessSection canEdit={canEdit} />
             ) : active === "integrations" ? (
-              <IntegrationsSection items={integrations} />
+              <div className="space-y-4">
+                <IntegrationsSection items={integrations} />
+                <EmailTestSection canEdit={canEdit} />
+              </div>
             ) : section ? (
               <SettingsSectionForm
                 key={section.id}
