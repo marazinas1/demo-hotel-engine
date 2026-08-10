@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SettingsField } from "./SettingsField";
+import { InvoicePreviewDialog } from "./InvoicePreviewDialog";
 
 function pick(section: SectionDef, settings: PropertySettings) {
   const out: Record<string, unknown> = {};
@@ -50,6 +51,7 @@ export function SettingsSectionForm({
   }, [section.id, settings]);
 
   const errors = form.formState.errors as Record<string, { message?: string }>;
+  const watched = form.watch() as Record<string, unknown>;
 
   return (
     <Card>
@@ -87,14 +89,25 @@ export function SettingsSectionForm({
               ? "Pakeitimai išsaugomi tik šiai skilčiai."
               : "Neturite teisių keisti nustatymų — rodomas tik peržiūros režimas."}
           </p>
-          <Button type="submit" disabled={!canEdit || saving} className="sm:w-auto">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            {section.id === "invoicing" && (
+              <InvoicePreviewDialog
+                values={watched as Partial<PropertySettings>}
+                fallbackCompanyName={settings.displayName ?? ""}
+                fallbackAddress={settings.address ?? ""}
+                currency={settings.currency ?? "EUR"}
+                vatRate={Number(settings.vatRate) || 0}
+              />
+            )}
+            <Button type="submit" disabled={!canEdit || saving} className="sm:w-auto">
             {saving ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
             {saving ? "Saugoma…" : "Išsaugoti"}
-          </Button>
+            </Button>
+          </div>
         </CardFooter>
       </form>
     </Card>
