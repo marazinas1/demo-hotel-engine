@@ -1,38 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import {
-  contentTemplateSchema,
-  renderPreview,
-  type ContentTemplateRecord,
-} from "./content-templates";
-
-async function assertAdmin(ctx: { supabase: any; userId: string }) {
-  const { data, error } = await ctx.supabase.rpc("has_role", {
-    _user_id: ctx.userId,
-    _role: "admin",
-  });
-  if (error) {
-    console.error("[content-templates:has_role]", error.message);
-    throw new Error("Nepavyko patikrinti teisių.");
-  }
-  if (!data) throw new Error("Neturite teisių valdyti turinio.");
-}
-
-function rowToRecord(row: Record<string, unknown>): ContentTemplateRecord {
-  return {
-    category: row["category"] as ContentTemplateRecord["category"],
-    templateName: String(row["template_name"] ?? ""),
-    subject: String(row["subject"] ?? ""),
-    content: String(row["content"] ?? ""),
-    fields:
-      row["fields"] && typeof row["fields"] === "object"
-        ? (row["fields"] as Record<string, string>)
-        : {},
-    isEnabled: Boolean(row["is_enabled"]),
-    updatedAt: (row["updated_at"] as string | undefined) ?? null,
-  };
-}
+import { contentTemplateSchema, renderPreview } from "./content-templates";
+import { assertAdmin, rowToRecord } from "./content-templates.server";
 
 export const listContentTemplates = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
