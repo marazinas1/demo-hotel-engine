@@ -921,6 +921,7 @@ export type Database = {
           quiet_hours_to: string
           require_email: boolean
           require_phone: boolean
+          review_link: string | null
           review_request_hours_after: number
           scope: string
           timezone: string
@@ -995,6 +996,7 @@ export type Database = {
           quiet_hours_to?: string
           require_email?: boolean
           require_phone?: boolean
+          review_link?: string | null
           review_request_hours_after?: number
           scope?: string
           timezone?: string
@@ -1069,6 +1071,7 @@ export type Database = {
           quiet_hours_to?: string
           require_email?: boolean
           require_phone?: boolean
+          review_link?: string | null
           review_request_hours_after?: number
           scope?: string
           timezone?: string
