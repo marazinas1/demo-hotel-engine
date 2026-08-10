@@ -133,6 +133,7 @@ export const settingsSchemas = {
     bankName: optionalText(120),
     invoiceLogoUrl: optionalText(500),
     invoiceNotes: z.string().max(2000).default(""),
+    invoiceIssuerName: optionalText(200),
   }),
   notifications: z.object({
     notifyBookingConfirmation: z.boolean(),
@@ -225,6 +226,7 @@ export const DEFAULT_PROPERTY_SETTINGS: PropertySettings = {
   bankName: "",
   invoiceLogoUrl: "",
   invoiceNotes: "",
+  invoiceIssuerName: "",
 
   notifyBookingConfirmation: true,
   notifyCheckinReminder: true,
@@ -295,6 +297,7 @@ export const SETTINGS_COLUMN_MAP: Record<keyof PropertySettings, string> = {
   bankName: "bank_name",
   invoiceLogoUrl: "invoice_logo_url",
   invoiceNotes: "invoice_notes",
+  invoiceIssuerName: "invoice_issuer_name",
   notifyBookingConfirmation: "notify_booking_confirmation",
   notifyCheckinReminder: "notify_checkin_reminder",
   notifyBookingChange: "notify_booking_change",
@@ -459,6 +462,7 @@ export const SETTINGS_SECTIONS: SectionDef[] = [
       { name: "bankName", label: "Banko pavadinimas", type: "text" },
       { name: "invoiceLogoUrl", label: "Logotipas sąskaitose", type: "url", colSpan: 2, help: "Nuoroda į logotipo paveikslėlį." },
       { name: "invoiceNotes", label: "Sąskaitos pastabos", type: "textarea", colSpan: 2 },
+      { name: "invoiceIssuerName", label: "Sąskaitą išrašo (vardas pavardė)", type: "text", colSpan: 2, help: "Neprivaloma — rodoma sąskaitos apačioje." },
     ],
   },
   {
