@@ -149,6 +149,10 @@ Rezervacijos sukūrimas. Statusas iš karto `pending`, `payment_status: unpaid`,
 **Body:** kaip `/quote` + `customer_name` (2–200), `customer_email` (galiojantis, iki 255),
 `customer_phone` (5–50), `bic` (nebūtinas, iki 20 simbolių).
 
+Papildomai (juridinis asmuo): `is_company` (boolean, numatyta `false`). Kai `true`,
+PRIVALOMI: `company_name` (iki 200), `company_code` (iki 50), `company_address` (iki 300).
+Nebūtinas: `company_vat_code` (iki 50).
+
 **Atsakymas `201`:**
 
 ```json
