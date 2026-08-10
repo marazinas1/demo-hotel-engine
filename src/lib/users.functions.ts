@@ -26,7 +26,8 @@ export const inviteUser = createServerFn({ method: "POST" })
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const opts = data.redirectTo ? { redirectTo: data.redirectTo } : undefined;
+    const { appLink } = await import("@/lib/app-url.server");
+    const opts = { redirectTo: appLink("/reset-password", data.redirectTo) };
     let link = await supabaseAdmin.auth.admin.generateLink({
       type: "invite",
       email: data.email,

@@ -19,10 +19,11 @@ export const requestPasswordReset = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     try {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { appLink } = await import("@/lib/app-url.server");
       const link = await supabaseAdmin.auth.admin.generateLink({
         type: "recovery",
         email: data.email,
-        options: { redirectTo: data.redirectTo },
+        options: { redirectTo: appLink("/reset-password", data.redirectTo) },
       });
       const actionLink = link.data?.properties?.action_link;
       if (link.error || !actionLink) {
