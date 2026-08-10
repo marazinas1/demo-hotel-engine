@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyRole } from "@/lib/properties.functions";
+import { requestPasswordReset } from "@/lib/auth-recovery.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/auth")({
 function LoginPage() {
   const navigate = useNavigate();
   const fetchRole = useServerFn(getMyRole);
+  const sendReset = useServerFn(requestPasswordReset);
   const [mode, setMode] = useState<"login" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,10 +54,9 @@ function LoginPage() {
         if (error) throw error;
         toast.success("Prisijungta");
       } else {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/reset-password`,
+        await sendReset({
+          data: { email, redirectTo: `${window.location.origin}/reset-password` },
         });
-        if (error) throw error;
         toast.success("Slaptažodžio atstatymo nuoroda išsiųsta į el. paštą.");
       }
     } catch (err) {
