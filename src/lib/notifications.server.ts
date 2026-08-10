@@ -37,6 +37,25 @@ async function admin(): Promise<Admin> {
 
 /* ------------------------------- siuntimas ------------------------------- */
 
+/** Įrašo inline stilius, kad pašto klientai (Gmail/Outlook) rodytų tarpus ir sąrašų ženkliukus. */
+export function wrapEmailHtml(html: string) {
+  if (/<html[\s>]/i.test(html)) return html;
+
+  const styled = (html ?? "")
+    .replace(/<p(\s[^>]*)?>/gi, '<p style="margin:0 0 14px 0;line-height:1.6;">')
+    .replace(/<ul(\s[^>]*)?>/gi, '<ul style="margin:0 0 14px 0;padding-left:22px;list-style-type:disc;">')
+    .replace(/<ol(\s[^>]*)?>/gi, '<ol style="margin:0 0 14px 0;padding-left:22px;list-style-type:decimal;">')
+    .replace(/<li(\s[^>]*)?>/gi, '<li style="margin:0 0 6px 0;line-height:1.6;display:list-item;">')
+    .replace(/<h([1-3])(\s[^>]*)?>/gi, (_m, lvl: string) => `<h${lvl} style="margin:20px 0 10px 0;line-height:1.3;">`)
+    .replace(/<blockquote(\s[^>]*)?>/gi,
+      '<blockquote style="margin:0 0 14px 0;padding-left:12px;border-left:3px solid #ddd;color:#555;">');
+
+  return `<!doctype html><html><body style="margin:0;padding:0;background:#f6f6f6;">
+<div style="max-width:600px;margin:0 auto;padding:24px;background:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#1a1a1a;">
+${styled}
+</div></body></html>`;
+}
+
 export async function sendEmail(opts: { to: string; subject: string; html: string; replyTo?: string }) {
   const apiKey = process.env["RESEND_API_KEY"];
   if (!apiKey) throw new Error("RESEND_API_KEY nesukonfigūruotas.");
@@ -55,7 +74,7 @@ export async function sendEmail(opts: { to: string; subject: string; html: strin
       from,
       to: [opts.to],
       subject: opts.subject,
-      html: opts.html,
+      html: wrapEmailHtml(opts.html),
       ...(opts.replyTo ? { reply_to: opts.replyTo } : {}),
     }),
   });
