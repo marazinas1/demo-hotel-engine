@@ -13,7 +13,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { inviteUser, listUsersWithRoles } from "@/lib/users.functions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Trash2 } from "lucide-react";
+import { deleteUser, inviteUser, listUsersWithRoles } from "@/lib/users.functions";
 
 const ROLE_LABEL: Record<string, string> = {
   admin: "Administratorius",
@@ -21,9 +33,18 @@ const ROLE_LABEL: Record<string, string> = {
   user: "Vartotojas",
 };
 
+function fmt(value: string | null | undefined, withTime = false) {
+  if (!value) return "—";
+  const d = new Date(value);
+  return withTime
+    ? d.toLocaleString("lt-LT", { hour12: false })
+    : d.toLocaleDateString("lt-LT");
+}
+
 export function UsersSection({ canEdit }: { canEdit: boolean }) {
   const invite = useServerFn(inviteUser);
   const fetchUsers = useServerFn(listUsersWithRoles);
+  const removeUser = useServerFn(deleteUser);
   const qc = useQueryClient();
 
   const [email, setEmail] = useState("");
@@ -52,6 +73,15 @@ export function UsersSection({ canEdit }: { canEdit: boolean }) {
       qc.invalidateQueries({ queryKey: ["users-with-roles"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Nepavyko pakviesti."),
+  });
+
+  const del = useMutation({
+    mutationFn: (userId: string) => removeUser({ data: { userId } }),
+    onSuccess: () => {
+      toast.success("Vartotojas ištrintas.");
+      qc.invalidateQueries({ queryKey: ["users-with-roles"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Nepavyko ištrinti."),
   });
 
   return (
@@ -123,6 +153,8 @@ export function UsersSection({ canEdit }: { canEdit: boolean }) {
                     <th className="py-2 font-medium">El. paštas</th>
                     <th className="py-2 font-medium">Rolė</th>
                     <th className="py-2 font-medium">Pridėtas</th>
+                    <th className="py-2 font-medium">Paskutinis prisijungimas</th>
+                    <th className="py-2" />
                   </tr>
                 </thead>
                 <tbody>
@@ -130,8 +162,38 @@ export function UsersSection({ canEdit }: { canEdit: boolean }) {
                     <tr key={`${u.userId}-${u.role}`} className="border-t">
                       <td className="py-2">{u.email || u.userId}</td>
                       <td className="py-2">{ROLE_LABEL[u.role] ?? u.role}</td>
+                      <td className="py-2 text-muted-foreground">{fmt(u.createdAt)}</td>
                       <td className="py-2 text-muted-foreground">
-                        {u.createdAt ? new Date(u.createdAt).toLocaleDateString("lt-LT") : "—"}
+                        {u.lastSignInAt ? fmt(u.lastSignInAt, true) : "Neprisijungė"}
+                      </td>
+                      <td className="py-2 text-right">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              disabled={!canEdit || del.isPending}
+                              aria-label="Ištrinti vartotoją"
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Ištrinti vartotoją?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                {u.email || u.userId} paskyra bus visam laikui ištrinta kartu su
+                                visomis rolėmis. Veiksmo atšaukti negalima.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Atšaukti</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => del.mutate(u.userId)}>
+                                Ištrinti
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </td>
                     </tr>
                   ))}

@@ -81,12 +81,32 @@ export const listUsersWithRoles = createServerFn({ method: "GET" })
 
     const rows = (data ?? []) as Array<{ user_id: string; role: string; created_at: string }>;
     const { data: authUsers } = await supabaseAdmin.auth.admin.listUsers({ perPage: 200 });
-    const emails = new Map((authUsers?.users ?? []).map((u) => [u.id, u.email ?? ""]));
+    const info = new Map(
+      (authUsers?.users ?? []).map((u) => [
+        u.id,
+        { email: u.email ?? "", lastSignInAt: u.last_sign_in_at ?? null },
+      ]),
+    );
 
     return rows.map((r) => ({
       userId: r.user_id,
       role: r.role,
       createdAt: r.created_at,
-      email: emails.get(r.user_id) ?? "",
+      email: info.get(r.user_id)?.email ?? "",
+      lastSignInAt: info.get(r.user_id)?.lastSignInAt ?? null,
     }));
+  });
+
+export const deleteUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ userId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    if (data.userId === context.userId) throw new Error("Negalite ištrinti savo paskyros.");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await supabaseAdmin.from("user_roles").delete().eq("user_id", data.userId);
+    const { error } = await supabaseAdmin.auth.admin.deleteUser(data.userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
