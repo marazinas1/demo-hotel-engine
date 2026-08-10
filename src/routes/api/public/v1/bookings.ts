@@ -114,7 +114,7 @@ export const Route = createFileRoute("/api/public/v1/bookings")({
                 client_type: d.is_company ? "company" : "person",
                 company_name: d.company_name,
                 company_code: d.company_code,
-                company_address: d.company_address,
+                customer_address: d.company_address,
                 vat_number: d.company_vat_code,
                 is_vat_payer: Boolean(d.company_vat_code.trim()),
                 source: "website",
