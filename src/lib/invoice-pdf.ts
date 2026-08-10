@@ -234,13 +234,13 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
   type Col = { key: string; label: string; x: number; align: "left" | "right"; maxWidth?: number };
   const cols: Col[] = data.isVatInvoice
     ? [
-        { key: "name", label: "Pavadinimas", x: marginX, align: "left", maxWidth: 58 },
-        { key: "qty", label: "Kiekis", x: 88, align: "right" },
-        { key: "unit", label: "Matas", x: 92, align: "left", maxWidth: 14 },
-        { key: "unitPriceNet", label: "Kaina be PVM", x: 126, align: "right" },
-        { key: "lineNet", label: "Suma be PVM", x: 148, align: "right" },
-        { key: "lineVat", label: "PVM suma", x: 166, align: "right" },
-        { key: "vatRate", label: "PVM %", x: 177, align: "right" },
+        { key: "name", label: "Pavadinimas", x: marginX, align: "left", maxWidth: 54 },
+        { key: "qty", label: "Kiekis", x: 84, align: "right" },
+        { key: "unit", label: "Matas", x: 88, align: "left", maxWidth: 14 },
+        { key: "unitPriceNet", label: "Kaina be PVM", x: 122, align: "right" },
+        { key: "lineNet", label: "Suma be PVM", x: 144, align: "right" },
+        { key: "lineVat", label: "PVM suma", x: 161, align: "right" },
+        { key: "vatRate", label: "PVM %", x: 171, align: "right" },
         { key: "lineTotal", label: "Iš viso", x: rightEdge, align: "right" },
       ]
     : [
@@ -259,10 +259,12 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
   y += 5;
 
   doc.setFont(font, "normal");
-  doc.setFontSize(8.5);
+  doc.setFontSize(8);
   const sym = curSymbol(data.currency);
   for (const item of data.lineItems) {
-    if (y > 255) {
+    const nameLines = doc.splitTextToSize(item.name, (cols[0]?.maxWidth ?? 54) - 2) as string[];
+    const rowHeight = Math.max(6, nameLines.length * 4 + 2);
+    if (y + rowHeight > 255) {
       doc.addPage();
       y = 20;
     }
@@ -270,8 +272,8 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
       let raw: string;
       switch (c.key) {
         case "name":
-          raw = item.name;
-          break;
+          doc.text(nameLines, c.x, y);
+          continue;
         case "qty":
           raw = String(item.qty);
           break;
@@ -298,7 +300,7 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
       }
       doc.text(raw, c.x, y, { align: c.align, maxWidth: c.maxWidth });
     }
-    y += 6;
+    y += rowHeight;
   }
 
   y += 2;
