@@ -143,6 +143,7 @@ export const settingsSchemas = {
     notifyCancellationConfirmation: z.boolean(),
     checkinReminderHoursBefore: z.number().int().min(1).max(336),
     reviewRequestHoursAfter: z.number().int().min(1).max(336),
+    reviewLink: optionalText(500),
   }),
   branding: z.object({
     brandPrimaryColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Naudokite HEX formatą, pvz. #0F172A"),
@@ -235,6 +236,7 @@ export const DEFAULT_PROPERTY_SETTINGS: PropertySettings = {
   notifyCancellationConfirmation: true,
   checkinReminderHoursBefore: 24,
   reviewRequestHoursAfter: 24,
+  reviewLink: "",
 
   brandPrimaryColor: "#0F172A",
   brandSecondaryColor: "#64748B",
@@ -305,6 +307,7 @@ export const SETTINGS_COLUMN_MAP: Record<keyof PropertySettings, string> = {
   notifyCancellationConfirmation: "notify_cancellation_confirmation",
   checkinReminderHoursBefore: "checkin_reminder_hours_before",
   reviewRequestHoursAfter: "review_request_hours_after",
+  reviewLink: "review_link",
   brandPrimaryColor: "brand_primary_color",
   brandSecondaryColor: "brand_secondary_color",
   brandLogoUrl: "brand_logo_url",
@@ -478,6 +481,7 @@ export const SETTINGS_SECTIONS: SectionDef[] = [
       { name: "notifyCancellationConfirmation", label: "Atšaukimo patvirtinimas", type: "switch", colSpan: 2 },
       { name: "checkinReminderHoursBefore", label: "Atvykimo priminimas prieš", type: "number", unit: "val.", min: 1 },
       { name: "reviewRequestHoursAfter", label: "Atsiliepimo prašymas po išvykimo", type: "number", unit: "val.", min: 1 },
+      { name: "reviewLink", label: "Atsiliepimų rinkimo nuoroda", type: "text", colSpan: 2, help: "Naudokite kintamąjį {{review_link}} atsiliepimo prašymo laiške." },
     ],
   },
   {

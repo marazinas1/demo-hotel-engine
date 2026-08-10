@@ -220,6 +220,7 @@ async function buildTokens(booking: Record<string, any>, settings: PropertySetti
     "{{currency}}": settings.currency || "EUR",
     "{{phone}}": settings.phone || "",
     "{{email}}": settings.email || "",
+    "{{review_link}}": String((settings as any).reviewLink ?? ""),
   } as Record<string, string>;
 }
 
