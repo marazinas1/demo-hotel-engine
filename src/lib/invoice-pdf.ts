@@ -239,7 +239,7 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
         { key: "unit", label: "Matas", x: 88, align: "left", maxWidth: 14 },
         { key: "unitPriceNet", label: "Kaina be PVM", x: 122, align: "right" },
         { key: "lineNet", label: "Suma be PVM", x: 144, align: "right" },
-        { key: "lineVat", label: "PVM suma", x: 161, align: "right" },
+        { key: "lineVat", label: "PVM", x: 161, align: "right" },
         { key: "vatRate", label: "PVM %", x: 171, align: "right" },
         { key: "lineTotal", label: "Iš viso", x: rightEdge, align: "right" },
       ]
@@ -252,7 +252,7 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
       ];
 
   doc.setFont(font, "bold");
-  doc.setFontSize(7.5);
+  doc.setFontSize(7);
   for (const c of cols) doc.text(c.label, c.x, y, { align: c.align });
   y += 2;
   doc.line(marginX, y, rightEdge, y);
