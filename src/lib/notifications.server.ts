@@ -113,7 +113,19 @@ async function loadTemplate(name: string) {
     .eq("category", "email")
     .eq("template_name", name)
     .maybeSingle();
-  return data as { subject: string; content: string; is_enabled: boolean; fields: Record<string, string> } | null;
+  if (data) {
+    return data as { subject: string; content: string; is_enabled: boolean; fields: Record<string, string> };
+  }
+  // Jei administratorius dar neišsaugojo šablono — naudojamas numatytasis tekstas.
+  const { CONTENT_TEMPLATES } = await import("./content-templates");
+  const def = CONTENT_TEMPLATES.find((t) => t.category === "email" && t.name === name);
+  if (!def?.defaultContent) return null;
+  return {
+    subject: def.defaultSubject ?? "",
+    content: def.defaultContent,
+    is_enabled: true,
+    fields: {} as Record<string, string>,
+  };
 }
 
 async function loadGuestInfoFields(name: string): Promise<Record<string, string>> {
