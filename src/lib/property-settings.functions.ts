@@ -1,37 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import {
-  SETTINGS_COLUMN_MAP,
-  settingsSchemas,
-  type PropertySettings,
-  type SettingsSectionId,
-} from "./property-settings";
+import { settingsSchemas, type SettingsSectionId } from "./property-settings";
 import { rowToSettings } from "./property-settings-map";
-
-function sectionToColumns(values: Record<string, unknown>) {
-  const patch: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(values)) {
-    const column = SETTINGS_COLUMN_MAP[key as keyof PropertySettings];
-    if (!column) continue;
-    patch[column] = value === "" && key !== "cancellationPolicyText" && key !== "invoiceNotes"
-      ? null
-      : value;
-  }
-  return patch;
-}
-
-async function assertAdmin(ctx: { supabase: any; userId: string }) {
-  const { data, error } = await ctx.supabase.rpc("has_role", {
-    _user_id: ctx.userId,
-    _role: "admin",
-  });
-  if (error) {
-    console.error("[property-settings:has_role]", error.message);
-    throw new Error("Nepavyko patikrinti teisių.");
-  }
-  if (!data) throw new Error("Neturite teisių keisti nustatymų.");
-}
+import { assertSettingsAdmin, sectionToColumns } from "./property-settings.server";
 
 export const getPropertySettings = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -52,11 +24,10 @@ export const getPropertySettings = createServerFn({ method: "GET" })
     };
   });
 
-const sectionIds = Object.keys(settingsSchemas) as [SettingsSectionId, ...SettingsSectionId[]];
-
 export const savePropertySettings = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => {
+    const sectionIds = Object.keys(settingsSchemas) as [SettingsSectionId, ...SettingsSectionId[]];
     const base = z
       .object({
         section: z.enum(sectionIds),
@@ -67,7 +38,7 @@ export const savePropertySettings = createServerFn({ method: "POST" })
     return { ...base, values: parsedValues as Record<string, unknown> };
   })
   .handler(async ({ data, context }) => {
-    await assertAdmin({ supabase: context.supabase, userId: context.userId });
+    await assertSettingsAdmin({ supabase: context.supabase, userId: context.userId });
 
     const patch = {
       ...sectionToColumns(data.values),
