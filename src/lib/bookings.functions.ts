@@ -307,7 +307,8 @@ export const updateBooking = createServerFn({ method: "POST" })
       const prev = before as { status?: string; date_from?: string; date_to?: string; total_amount?: number } | null;
       const next = row as { status?: string; date_from?: string; date_to?: string; total_amount?: number };
       if (prev && prev.status !== "cancelled" && next.status === "cancelled") {
-        await notifyBookingEvent(id, "booking_cancellation");
+        // Atšaukimo laiškas svečiui siunčiamas visada, nepriklausomai nuo jungiklio.
+        await notifyBookingEvent(id, "booking_cancellation", { force: true });
       } else if (
         prev &&
         (prev.date_from !== next.date_from ||
