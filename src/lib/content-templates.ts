@@ -21,6 +21,7 @@ export const CONTENT_VARIABLES = [
   { token: "{{currency}}", label: "Valiuta" },
   { token: "{{phone}}", label: "Telefonas" },
   { token: "{{email}}", label: "El. paštas" },
+  { token: "{{review_link}}", label: "Atsiliepimo nuoroda" },
 ] as const;
 
 export const PREVIEW_SAMPLE: Record<string, string> = {
@@ -44,6 +45,7 @@ export const PREVIEW_SAMPLE: Record<string, string> = {
   "{{currency}}": "EUR",
   "{{phone}}": "+370 600 00000",
   "{{email}}": "info@revoo.lt",
+  "{{review_link}}": "https://g.page/r/atsiliepimas",
 };
 
 export function renderPreview(text: string) {
