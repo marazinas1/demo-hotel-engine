@@ -1,0 +1,148 @@
+import { useEffect, useState } from "react";
+import { Eye, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import type { PropertySettings } from "@/lib/property-settings";
+import { buildInvoicePdf, type InvoiceDocData } from "@/lib/invoice-pdf";
+
+function mockInvoiceData(
+  values: Partial<PropertySettings>,
+  fallbackCompanyName: string,
+  fallbackAddress: string,
+  currency: string,
+  vatRate: number,
+): InvoiceDocData {
+  const isVatInvoice = Boolean(values.companyVatCode?.trim());
+  const rate = isVatInvoice ? vatRate || 0 : 0;
+  const divisor = 1 + rate / 100;
+  const nightGross = 60;
+  const nights = 2;
+  const extraGross = 16;
+  const stayGross = nightGross * nights;
+  const stayNet = stayGross / divisor;
+  const extraNet = extraGross / divisor;
+
+  const lineItems = [
+    {
+      name: "Nakvynė — Standard kambarys (pavyzdys)",
+      qty: nights,
+      unit: "naktys",
+      unitPriceNet: stayNet / nights,
+      lineNet: stayNet,
+      lineVat: stayGross - stayNet,
+      lineTotal: stayGross,
+    },
+    {
+      name: "Papildoma paslauga — Pusryčiai (pavyzdys)",
+      qty: 2,
+      unit: "vnt.",
+      unitPriceNet: extraNet / 2,
+      lineNet: extraNet,
+      lineVat: extraGross - extraNet,
+      lineTotal: extraGross,
+    },
+  ];
+  const subtotalNet = lineItems.reduce((s, l) => s + l.lineNet, 0);
+  const vatAmount = lineItems.reduce((s, l) => s + l.lineVat, 0);
+
+  return {
+    fullNumber: `${values.invoiceSeries?.trim() || "SF"}-${String(values.invoiceNextNumber || 1).padStart(4, "0")}`,
+    issueDate: new Date().toISOString().slice(0, 10),
+    isVatInvoice,
+    vatRate: rate,
+    currency: currency || "EUR",
+    seller: {
+      name: values.companyName?.trim() || fallbackCompanyName || "Jūsų įmonės pavadinimas",
+      code: values.companyCode?.trim() || "",
+      vatCode: values.companyVatCode?.trim() || "",
+      address: values.companyAddress?.trim() || fallbackAddress || "",
+      iban: values.iban?.trim() || "",
+      bankName: values.bankName?.trim() || "",
+      logoUrl: values.invoiceLogoUrl?.trim() || "",
+    },
+    buyer: {
+      name: "Jonas Jonaitis (pavyzdys)",
+      code: "",
+      vatCode: "",
+      address: "Gedimino pr. 1, Vilnius, Lietuva",
+      phone: "+370 600 00000",
+      email: "jonas.jonaitis@pavyzdys.lt",
+    },
+    lineItems,
+    subtotalNet,
+    vatAmount,
+    total: subtotalNet + vatAmount,
+    notes: values.invoiceNotes?.trim() || "",
+    issuedBy: values.invoiceIssuerName?.trim() || "",
+  };
+}
+
+export function InvoicePreviewDialog({
+  values,
+  fallbackCompanyName,
+  fallbackAddress,
+  currency,
+  vatRate,
+}: {
+  values: Partial<PropertySettings>;
+  fallbackCompanyName: string;
+  fallbackAddress: string;
+  currency: string;
+  vatRate: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const [url, setUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    setLoading(true);
+    const data = mockInvoiceData(values, fallbackCompanyName, fallbackAddress, currency, vatRate);
+    buildInvoicePdf(data).then((doc) => {
+      if (cancelled) return;
+      setUrl(doc.output("bloburl") as unknown as string);
+      setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, JSON.stringify(values), fallbackCompanyName, fallbackAddress, currency, vatRate]);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button type="button" variant="outline">
+          <Eye className="mr-2 h-4 w-4" />
+          Peržiūrėti sąskaitą
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="flex max-h-[90vh] max-w-3xl flex-col">
+        <DialogHeader>
+          <DialogTitle>Sąskaitos peržiūra</DialogTitle>
+          <DialogDescription>
+            Pavyzdys su testiniais rezervacijos duomenimis — atsinaujina pagal formoje įvestas
+            (dar neišsaugotas) reikšmes. Realiai sąskaitai bus naudojami tikros rezervacijos
+            duomenys.
+          </DialogDescription>
+        </DialogHeader>
+        {loading || !url ? (
+          <div className="flex h-64 items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Generuojama peržiūra…
+          </div>
+        ) : (
+          <iframe src={url} title="Sąskaitos peržiūra" className="h-[70vh] w-full rounded-md border" />
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
