@@ -392,13 +392,13 @@ export async function runScheduledNotifications() {
     const today = new Date(now).toISOString().slice(0, 10);
     const { data: rows } = await db
       .from("bookings")
-      .select("id, date_from, status")
+      .select("id, date_from, check_in_time, status")
       .in("status", ["confirmed", "pending", "completed"])
       .gte("date_from", today)
       .lte("date_from", windowEnd);
-    for (const r of (rows ?? []) as Array<{ id: string; date_from: string }>) {
+    for (const r of (rows ?? []) as Array<{ id: string; date_from: string; check_in_time: string | null }>) {
       const target = addHours(
-        zonedToUtc(r.date_from, settings.checkinFrom || "15:00", tz).toISOString(),
+        zonedToUtc(r.date_from, r.check_in_time || settings.checkinFrom || "15:00", tz).toISOString(),
         -hours,
       );
       if (target.getTime() > now) continue;
@@ -414,13 +414,13 @@ export async function runScheduledNotifications() {
     const today = new Date(now).toISOString().slice(0, 10);
     const { data: rows } = await db
       .from("bookings")
-      .select("id, date_to, status")
+      .select("id, date_to, check_out_time, status")
       .in("status", ["confirmed", "completed"])
       .gte("date_to", from)
       .lte("date_to", today);
-    for (const r of (rows ?? []) as Array<{ id: string; date_to: string }>) {
+    for (const r of (rows ?? []) as Array<{ id: string; date_to: string; check_out_time: string | null }>) {
       const target = addHours(
-        zonedToUtc(r.date_to, settings.checkoutUntil || "11:00", tz).toISOString(),
+        zonedToUtc(r.date_to, r.check_out_time || settings.checkoutUntil || "11:00", tz).toISOString(),
         hours,
       );
       if (target.getTime() > now) continue;
