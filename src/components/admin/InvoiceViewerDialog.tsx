@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Download, Eye, Loader2 } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import type { jsPDF } from "jspdf";
 import { Button } from "@/components/ui/button";
+import { PdfPreview } from "@/components/admin/PdfPreview";
 import {
   Dialog,
   DialogContent,
@@ -53,19 +54,17 @@ function toDocData(row: InvoiceRow): InvoiceDocData {
 
 export function InvoiceViewerDialog({ invoice }: { invoice: InvoiceRow }) {
   const [open, setOpen] = useState(false);
-  const [url, setUrl] = useState<string | null>(null);
+  const [bytes, setBytes] = useState<Uint8Array | null>(null);
   const [pdfDoc, setPdfDoc] = useState<jsPDF | null>(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    setLoading(true);
+    setBytes(null);
     buildInvoicePdf(toDocData(invoice)).then((doc) => {
       if (cancelled) return;
-      setUrl(doc.output("bloburl") as unknown as string);
       setPdfDoc(doc);
-      setLoading(false);
+      setBytes(new Uint8Array(doc.output("arraybuffer") as ArrayBuffer));
     });
     return () => {
       cancelled = true;
@@ -86,24 +85,18 @@ export function InvoiceViewerDialog({ invoice }: { invoice: InvoiceRow }) {
           <DialogTitle>Sąskaita Nr. {invoice.full_number}</DialogTitle>
           <DialogDescription>Sugeneruota {invoice.issue_date}.</DialogDescription>
         </DialogHeader>
-        {loading || !url ? (
-          <div className="flex h-64 items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Kraunama…
-          </div>
-        ) : (
-          <>
-            <iframe src={url} title="Sąskaita" className="h-[70vh] w-full rounded-md border" />
-            <Button
-              type="button"
-              onClick={() => pdfDoc?.save(`saskaita-${invoice.full_number}.pdf`)}
-              className="mt-2 w-fit"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Atsisiųsti PDF
-            </Button>
-          </>
-        )}
+        <div className="max-h-[70vh] overflow-y-auto">
+          <PdfPreview data={bytes} />
+        </div>
+        <Button
+          type="button"
+          disabled={!pdfDoc}
+          onClick={() => pdfDoc?.save(`saskaita-${invoice.full_number}.pdf`)}
+          className="mt-2 w-fit"
+        >
+          <Download className="mr-2 h-4 w-4" />
+          Atsisiųsti PDF
+        </Button>
       </DialogContent>
     </Dialog>
   );
