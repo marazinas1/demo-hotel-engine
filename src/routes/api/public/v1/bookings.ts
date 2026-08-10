@@ -26,6 +26,23 @@ export const Route = createFileRoute("/api/public/v1/bookings")({
               customer_email: z.string().trim().email().max(255),
               customer_phone: z.string().trim().min(5).max(50),
               bic: z.string().trim().max(20).optional(),
+              is_company: z.boolean().default(false),
+              company_name: z.string().trim().max(200).default(""),
+              company_code: z.string().trim().max(50).default(""),
+              company_vat_code: z.string().trim().max(50).default(""),
+              company_address: z.string().trim().max(300).default(""),
+            }).superRefine((d, ctx) => {
+              if (d.is_company) {
+                if (!d.company_name.trim()) {
+                  ctx.addIssue({ code: "custom", path: ["company_name"], message: "Įmonės pavadinimas privalomas" });
+                }
+                if (!d.company_code.trim()) {
+                  ctx.addIssue({ code: "custom", path: ["company_code"], message: "Įmonės kodas privalomas" });
+                }
+                if (!d.company_address.trim()) {
+                  ctx.addIssue({ code: "custom", path: ["company_address"], message: "Įmonės adresas privalomas" });
+                }
+              }
             });
             let body: unknown;
             try {
@@ -94,6 +111,12 @@ export const Route = createFileRoute("/api/public/v1/bookings")({
                 customer_name: d.customer_name,
                 customer_phone: d.customer_phone,
                 customer_email: d.customer_email,
+                client_type: d.is_company ? "company" : "person",
+                company_name: d.company_name,
+                company_code: d.company_code,
+                company_address: d.company_address,
+                vat_number: d.company_vat_code,
+                is_vat_payer: Boolean(d.company_vat_code.trim()),
                 source: "website",
                 status: "pending",
                 total_amount: quote.total,
