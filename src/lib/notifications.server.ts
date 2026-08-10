@@ -3,6 +3,7 @@
 // `booking_notifications` žurnalą, kad tas pats laiškas nebūtų siųstas du kartus.
 
 import { DEFAULT_PROPERTY_SETTINGS, SETTINGS_COLUMN_MAP, type PropertySettings } from "./property-settings";
+import { ROOM_KINDS, BED_TYPES } from "./properties";
 
 export type NotificationKind =
   | "booking_confirmation"
@@ -116,6 +117,26 @@ function money(v: unknown) {
   return n.toFixed(2).replace(".", ",");
 }
 
+/** „Miegamasis 1 (didelė dvigulė lova), Svetainė (miegamoji sofa)“ */
+function formatRoomNames(rooms: unknown): string {
+  const configs = (rooms as { configs?: Array<{ kind?: string; beds?: number; bedType?: string }> } | null)
+    ?.configs;
+  if (!Array.isArray(configs) || configs.length === 0) return "";
+  const kindLabel = new Map<string, string>(ROOM_KINDS.map((r) => [r.value as string, r.label as string]));
+  const bedLabel = new Map<string, string>(BED_TYPES.map((b) => [b.value as string, b.label as string]));
+  return configs
+    .map((c) => {
+      const name = kindLabel.get(String(c.kind ?? "")) ?? String(c.kind ?? "");
+      if (!name) return "";
+      const bed = bedLabel.get(String(c.bedType ?? ""));
+      const beds = Number(c.beds) || 0;
+      const detail = bed ? `${beds > 1 ? `${beds} × ` : ""}${bed.toLowerCase()}` : "";
+      return detail ? `${name} (${detail})` : name;
+    })
+    .filter(Boolean)
+    .join(", ");
+}
+
 export function renderTokens(text: string, tokens: Record<string, string>) {
   return Object.entries(tokens).reduce((acc, [token, value]) => acc.split(token).join(value), text ?? "");
 }
@@ -124,7 +145,7 @@ async function buildTokens(booking: Record<string, any>, settings: PropertySetti
   const db = await admin();
   const { data: prop } = await db
     .from("properties")
-    .select("name, door_code, location_note")
+    .select("name, door_code, location_note, rooms")
     .eq("id", booking["property_id"])
     .maybeSingle();
   const wifi = await loadGuestInfoFields("wifi");
@@ -141,7 +162,7 @@ async function buildTokens(booking: Record<string, any>, settings: PropertySetti
   return {
     "{{guest_name}}": String(booking["customer_name"] ?? ""),
     "{{property_name}}": String((prop as any)?.name ?? settings.displayName ?? ""),
-    "{{room_name}}": "",
+    "{{room_name}}": formatRoomNames((prop as any)?.rooms),
     "{{booking_number}}": String(booking["booking_number"] ?? ""),
     "{{date_from}}": String(booking["date_from"] ?? ""),
     "{{date_to}}": String(booking["date_to"] ?? ""),
