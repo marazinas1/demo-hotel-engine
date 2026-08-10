@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const CONTENT_VARIABLES = [
   { token: "{{guest_name}}", label: "Svečio vardas" },
+  { token: "{{guest_name_vocative}}", label: "Svečio vardas (kreipinys)" },
   { token: "{{property_name}}", label: "Objekto pavadinimas" },
   { token: "{{location}}", label: "Vieta" },
   { token: "{{room_name}}", label: "Kambario pavadinimas" },
@@ -24,6 +25,7 @@ export const CONTENT_VARIABLES = [
 
 export const PREVIEW_SAMPLE: Record<string, string> = {
   "{{guest_name}}": "Jonas Jonaitis",
+  "{{guest_name_vocative}}": "Jonai Jonaiti",
   "{{property_name}}": "Dharma Stay",
   "{{location}}": "Vilniaus g. 10, Druskininkai — 2 aukštas, durys Nr. 3",
   "{{room_name}}": "Miegamasis 1",
