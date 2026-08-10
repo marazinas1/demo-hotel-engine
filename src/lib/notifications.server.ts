@@ -170,7 +170,15 @@ function formatRoomNames(rooms: unknown): string {
 }
 
 export function renderTokens(text: string, tokens: Record<string, string>) {
-  return Object.entries(tokens).reduce((acc, [token, value]) => acc.split(token).join(value), text ?? "");
+  const rendered = Object.entries(tokens).reduce(
+    (acc, [token, value]) => acc.split(token).join(value),
+    text ?? "",
+  );
+  // Atsarginis variantas: nežinomi kintamieji svečiui nerodomi kaip {{...}}.
+  // Kreipinio kintamasis pakeičiamas paprastu vardu, kiti — pašalinami.
+  return rendered
+    .replace(/\{\{\s*guest_name_vocative\s*\}\}/g, tokens["{{guest_name}}"] ?? "")
+    .replace(/\{\{\s*[\w.]+\s*\}\}/g, "");
 }
 
 async function buildTokens(booking: Record<string, any>, settings: PropertySettings) {
