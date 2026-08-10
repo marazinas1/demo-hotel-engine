@@ -266,6 +266,14 @@ export const createBooking = createServerFn({ method: "POST" })
     } catch (e) {
       console.error("[createBooking:notify]", e);
     }
+    if ((row as { status?: string }).status === "confirmed") {
+      try {
+        const { generateInvoiceForBooking } = await import("./invoices.server");
+        await generateInvoiceForBooking(String((row as { id: string }).id));
+      } catch (e) {
+        console.error("[createBooking:invoice]", e);
+      }
+    }
     return row;
   });
 
@@ -312,6 +320,14 @@ export const updateBooking = createServerFn({ method: "POST" })
         // Kitais atvejais (datos/suma) gerbiamas administratoriaus nustatymas.
         const justConfirmed = prev.status !== "confirmed" && next.status === "confirmed";
         await notifyBookingEvent(id, "booking_change", justConfirmed ? { force: true } : undefined);
+        if (justConfirmed) {
+          try {
+            const { generateInvoiceForBooking } = await import("./invoices.server");
+            await generateInvoiceForBooking(id);
+          } catch (e) {
+            console.error("[updateBooking:invoice]", e);
+          }
+        }
       }
     } catch (e) {
       console.error("[updateBooking:notify]", e);

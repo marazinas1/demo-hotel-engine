@@ -400,6 +400,77 @@ export type Database = {
           },
         ]
       }
+      invoices: {
+        Row: {
+          booking_id: string
+          buyer: Json
+          created_at: string
+          currency: string
+          full_number: string
+          id: string
+          invoice_number: number
+          invoice_series: string
+          is_vat_invoice: boolean
+          issue_date: string
+          issued_by: string
+          line_items: Json
+          notes: string
+          seller: Json
+          subtotal_net: number
+          total: number
+          vat_amount: number
+          vat_rate: number
+        }
+        Insert: {
+          booking_id: string
+          buyer: Json
+          created_at?: string
+          currency?: string
+          full_number: string
+          id?: string
+          invoice_number: number
+          invoice_series?: string
+          is_vat_invoice?: boolean
+          issue_date?: string
+          issued_by?: string
+          line_items: Json
+          notes?: string
+          seller: Json
+          subtotal_net?: number
+          total?: number
+          vat_amount?: number
+          vat_rate?: number
+        }
+        Update: {
+          booking_id?: string
+          buyer?: Json
+          created_at?: string
+          currency?: string
+          full_number?: string
+          id?: string
+          invoice_number?: number
+          invoice_series?: string
+          is_vat_invoice?: boolean
+          issue_date?: string
+          issued_by?: string
+          line_items?: Json
+          notes?: string
+          seller?: Json
+          subtotal_net?: number
+          total?: number
+          vat_amount?: number
+          vat_rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_views: {
         Row: {
           country: string
@@ -822,6 +893,7 @@ export type Database = {
           iban: string | null
           id: string
           integrations: Json
+          invoice_issuer_name: string
           invoice_logo_url: string | null
           invoice_next_number: number
           invoice_notes: string | null
@@ -895,6 +967,7 @@ export type Database = {
           iban?: string | null
           id?: string
           integrations?: Json
+          invoice_issuer_name?: string
           invoice_logo_url?: string | null
           invoice_next_number?: number
           invoice_notes?: string | null
@@ -968,6 +1041,7 @@ export type Database = {
           iban?: string | null
           id?: string
           integrations?: Json
+          invoice_issuer_name?: string
           invoice_logo_url?: string | null
           invoice_next_number?: number
           invoice_notes?: string | null
@@ -1138,6 +1212,13 @@ export type Database = {
     Functions: {
       admin_get_door_code: { Args: { _property_id: string }; Returns: string }
       cancel_expired_pending_bookings: { Args: never; Returns: number }
+      claim_invoice_number: {
+        Args: never
+        Returns: {
+          number: number
+          series: string
+        }[]
+      }
       get_active_booked_dates: {
         Args: never
         Returns: {
