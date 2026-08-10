@@ -4,6 +4,7 @@
 
 import { DEFAULT_PROPERTY_SETTINGS, SETTINGS_COLUMN_MAP, type PropertySettings } from "./property-settings";
 import { ROOM_KINDS, BED_TYPES } from "./properties";
+import { toVocative } from "./lt-vocative";
 
 export type NotificationKind =
   | "booking_confirmation"
@@ -192,6 +193,7 @@ async function buildTokens(booking: Record<string, any>, settings: PropertySetti
 
   return {
     "{{guest_name}}": String(booking["customer_name"] ?? ""),
+    "{{guest_name_vocative}}": toVocative(String(booking["customer_name"] ?? "")),
     "{{property_name}}": String((prop as any)?.name ?? settings.displayName ?? ""),
     "{{room_name}}": formatRoomNames((prop as any)?.rooms),
     "{{booking_number}}": String(booking["booking_number"] ?? ""),
