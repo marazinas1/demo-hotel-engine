@@ -1,5 +1,38 @@
 import { jsPDF } from "jspdf";
 
+const FONT = "DejaVuSans";
+let fontCache: { normal: string; bold: string } | null = null;
+
+async function fetchFontBase64(url: string): Promise<string> {
+  const res = await fetch(url);
+  const buf = new Uint8Array(await res.arrayBuffer());
+  let binary = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < buf.length; i += chunk) {
+    binary += String.fromCharCode(...buf.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+async function registerUnicodeFont(doc: jsPDF): Promise<boolean> {
+  try {
+    if (!fontCache) {
+      const [normal, bold] = await Promise.all([
+        fetchFontBase64("/fonts/DejaVuSans.ttf"),
+        fetchFontBase64("/fonts/DejaVuSans-Bold.ttf"),
+      ]);
+      fontCache = { normal, bold };
+    }
+    doc.addFileToVFS("DejaVuSans.ttf", fontCache.normal);
+    doc.addFont("DejaVuSans.ttf", FONT, "normal");
+    doc.addFileToVFS("DejaVuSans-Bold.ttf", fontCache.bold);
+    doc.addFont("DejaVuSans-Bold.ttf", FONT, "bold");
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export type InvoiceLineItem = {
   name: string;
   qty: number;
@@ -110,6 +143,8 @@ async function loadImageAsDataUrl(url: string): Promise<string | null> {
 
 export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const hasUnicodeFont = await registerUnicodeFont(doc);
+  const font = hasUnicodeFont ? FONT : "helvetica";
   const pageWidth = doc.internal.pageSize.getWidth();
   const marginX = 18;
   const rightEdge = pageWidth - marginX;
@@ -126,11 +161,11 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
     }
   }
 
-  doc.setFont("helvetica", "bold");
+  doc.setFont(font, "bold");
   doc.setFontSize(15);
   doc.text(data.isVatInvoice ? "PVM SĄSKAITA FAKTŪRA" : "SĄSKAITA", rightEdge, y, { align: "right" });
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont(font, "normal");
   doc.setFontSize(10);
   y += 7;
   const numberLabel = data.fullNumber.includes("-")
@@ -153,11 +188,11 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
   let sy = y;
   let by = y;
 
-  doc.setFont("helvetica", "bold");
+  doc.setFont(font, "bold");
   doc.setFontSize(9);
   doc.text("Pardavėjas", sellerX, sy);
   doc.text("Pirkėjas", buyerX, by);
-  doc.setFont("helvetica", "normal");
+  doc.setFont(font, "normal");
   sy += 6;
   by += 6;
 
@@ -208,14 +243,14 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
         { key: "lineTotal", label: "Suma", x: rightEdge, align: "right" },
       ];
 
-  doc.setFont("helvetica", "bold");
+  doc.setFont(font, "bold");
   doc.setFontSize(7.5);
   for (const c of cols) doc.text(c.label, c.x, y, { align: c.align });
   y += 2;
   doc.line(marginX, y, rightEdge, y);
   y += 5;
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont(font, "normal");
   doc.setFontSize(8.5);
   for (const item of data.lineItems) {
     if (y > 255) {
@@ -270,10 +305,10 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
     doc.text(`${money(data.vatAmount)} ${data.currency}`, rightEdge, y, { align: "right" });
     y += 6;
   }
-  doc.setFont("helvetica", "bold");
+  doc.setFont(font, "bold");
   doc.text("Bendra suma", rightEdge - 42, y, { align: "right" });
   doc.text(`${money(data.total)} ${data.currency}`, rightEdge, y, { align: "right" });
-  doc.setFont("helvetica", "normal");
+  doc.setFont(font, "normal");
   y += 12;
 
   doc.setFontSize(9);
