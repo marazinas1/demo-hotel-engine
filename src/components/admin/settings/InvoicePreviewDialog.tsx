@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Eye, Loader2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PdfPreview } from "@/components/admin/PdfPreview";
 import {
   Dialog,
   DialogContent,
@@ -98,18 +99,16 @@ export function InvoicePreviewDialog({
   vatRate: number;
 }) {
   const [open, setOpen] = useState(false);
-  const [url, setUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [bytes, setBytes] = useState<Uint8Array | null>(null);
 
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    setLoading(true);
+    setBytes(null);
     const data = mockInvoiceData(values, fallbackCompanyName, fallbackAddress, currency, vatRate);
     buildInvoicePdf(data).then((doc) => {
       if (cancelled) return;
-      setUrl(doc.output("bloburl") as unknown as string);
-      setLoading(false);
+      setBytes(new Uint8Array(doc.output("arraybuffer") as ArrayBuffer));
     });
     return () => {
       cancelled = true;
@@ -134,14 +133,9 @@ export function InvoicePreviewDialog({
             duomenys.
           </DialogDescription>
         </DialogHeader>
-        {loading || !url ? (
-          <div className="flex h-64 items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Generuojama peržiūra…
-          </div>
-        ) : (
-          <iframe src={url} title="Sąskaitos peržiūra" className="h-[70vh] w-full rounded-md border" />
-        )}
+        <div className="max-h-[70vh] overflow-y-auto">
+          <PdfPreview data={bytes} />
+        </div>
       </DialogContent>
     </Dialog>
   );
