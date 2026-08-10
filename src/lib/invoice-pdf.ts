@@ -121,6 +121,14 @@ export function amountInWords(total: number, currencyCode: string): string {
   return `${numberToLithuanianWords(whole)} ${currencyCode} ir ${numberToLithuanianWords(cents)} ct`;
 }
 
+function curSymbol(code: string) {
+  const c = (code || "EUR").toUpperCase();
+  if (c === "EUR") return "\u20AC";
+  if (c === "USD") return "$";
+  if (c === "GBP") return "\u00A3";
+  return c;
+}
+
 function money(n: number) {
   return (Number(n) || 0).toFixed(2).replace(".", ",");
 }
@@ -229,10 +237,10 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
         { key: "name", label: "Pavadinimas", x: marginX, align: "left", maxWidth: 58 },
         { key: "qty", label: "Kiekis", x: 88, align: "right" },
         { key: "unit", label: "Matas", x: 92, align: "left", maxWidth: 14 },
-        { key: "unitPriceNet", label: "Kaina be PVM", x: 128, align: "right" },
-        { key: "lineNet", label: "Suma be PVM", x: 152, align: "right" },
-        { key: "lineVat", label: "PVM suma", x: 170, align: "right" },
-        { key: "vatRate", label: "PVM %", x: 181, align: "right" },
+        { key: "unitPriceNet", label: "Kaina be PVM", x: 126, align: "right" },
+        { key: "lineNet", label: "Suma be PVM", x: 148, align: "right" },
+        { key: "lineVat", label: "PVM suma", x: 166, align: "right" },
+        { key: "vatRate", label: "PVM %", x: 177, align: "right" },
         { key: "lineTotal", label: "Iš viso", x: rightEdge, align: "right" },
       ]
     : [
@@ -252,6 +260,7 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
 
   doc.setFont(font, "normal");
   doc.setFontSize(8.5);
+  const sym = curSymbol(data.currency);
   for (const item of data.lineItems) {
     if (y > 255) {
       doc.addPage();
@@ -270,19 +279,19 @@ export async function buildInvoicePdf(data: InvoiceDocData): Promise<jsPDF> {
           raw = item.unit;
           break;
         case "unitPriceNet":
-          raw = `${money(item.unitPriceNet)} ${data.currency}`;
+          raw = `${money(item.unitPriceNet)} ${sym}`;
           break;
         case "lineNet":
-          raw = `${money(item.lineNet)} ${data.currency}`;
+          raw = `${money(item.lineNet)} ${sym}`;
           break;
         case "lineVat":
-          raw = `${money(item.lineVat)} ${data.currency}`;
+          raw = `${money(item.lineVat)} ${sym}`;
           break;
         case "vatRate":
           raw = `${data.vatRate}%`;
           break;
         case "lineTotal":
-          raw = `${money(item.lineTotal)} ${data.currency}`;
+          raw = `${money(item.lineTotal)} ${sym}`;
           break;
         default:
           raw = "";
