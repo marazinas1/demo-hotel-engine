@@ -3,6 +3,7 @@
 // `booking_notifications` žurnalą, kad tas pats laiškas nebūtų siųstas du kartus.
 
 import { DEFAULT_PROPERTY_SETTINGS, SETTINGS_COLUMN_MAP, type PropertySettings } from "./property-settings";
+import { ROOM_KINDS, BED_TYPES } from "./properties";
 
 export type NotificationKind =
   | "booking_confirmation"
@@ -121,8 +122,8 @@ function formatRoomNames(rooms: unknown): string {
   const configs = (rooms as { configs?: Array<{ kind?: string; beds?: number; bedType?: string }> } | null)
     ?.configs;
   if (!Array.isArray(configs) || configs.length === 0) return "";
-  const kindLabel = new Map(ROOM_KINDS.map((r) => [r.value as string, r.label]));
-  const bedLabel = new Map(BED_TYPES.map((b) => [b.value as string, b.label]));
+  const kindLabel = new Map<string, string>(ROOM_KINDS.map((r) => [r.value as string, r.label as string]));
+  const bedLabel = new Map<string, string>(BED_TYPES.map((b) => [b.value as string, b.label as string]));
   return configs
     .map((c) => {
       const name = kindLabel.get(String(c.kind ?? "")) ?? String(c.kind ?? "");
