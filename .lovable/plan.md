@@ -1,43 +1,29 @@
-# Plan: Connect this Lovable project to GitHub for two-way sync
+# Move to a fresh Lovable Cloud backend
 
-## Goal
-Enable the Lovable ↔ GitHub two-way sync so the project code lives in a GitHub repository and future changes can flow in both directions.
+Provision a brand new backend for this project through Lovable Cloud and point the app at it instead of the currently configured external project (`hheucdzlnxsjcuysdezb`).
 
-## Current state
-- The project exists as a TanStack Start placeholder (`src/routes/index.tsx` still shows the blank-page image).
-- The local git remote points to Lovable's private storage (`git.private.lovable-gcp.code.storage`), not to GitHub.
-- Lovable does not support importing an existing external GitHub repository (such as `dharmastay`).
-- Lovable's GitHub sync can only create a new GitHub repository from this project and keep it in sync.
+## What happens
 
-## What this plan will do
-1. Guide the project owner to connect the project to GitHub through the Lovable editor UI.
-2. After the connection, create a new GitHub repository from this Lovable project.
-3. Trigger the initial sync so Lovable pushes the current project code to GitHub.
-4. Verify the new GitHub remote appears and the repository contains the latest files.
+1. Enable Lovable Cloud, which provisions a new database, auth, storage and secrets for this project.
+2. `.env` and `supabase/config.toml` are rewritten automatically with the new project id, URL and publishable key. The generated client files keep working unchanged.
+3. Re-apply the existing schema (60 migration files under `supabase/migrations`) to the new database so all tables, functions, RLS policies and grants exist again: properties, bookings, invoices, contracts, expenses, content templates, property settings, user roles, API clients, staff/housekeeping tables and the related RPCs.
+4. Verify the app boots: admin routes load, auth sign-in works, public `/api/public/v1/*` and staff `/api/staff/v1/*` endpoints respond.
 
-## Steps
+## Important consequences
 
-1. **Open the GitHub connect flow in Lovable**
-   - In the Lovable editor, click the **Plus (+)** menu in the chat input (bottom left).
-   - Choose **GitHub → Connect project**.
+- **No data is copied.** The new database starts empty: no bookings, properties, invoices, uploaded images or user accounts. You will need to create an admin account again and re-enter (or separately export/import) content.
+- **Storage files** (property images, PDFs) are not transferred; existing image URLs pointing at the old project will break.
+- **Secrets must be re-added**: `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `LOVABLE_API_KEY` and any other integration keys.
+- **API keys for the public API** (`api_clients`) are stored as hashes and cannot be migrated; new keys must be generated and handed to the client-side app.
+- Any external systems (iCal sync URLs, cron callers, the separate client-facing Lovable app) will need the new API keys.
 
-2. **Authorize the Lovable GitHub App**
-   - Complete the OAuth authorization on GitHub when prompted.
+## Technical notes
 
-3. **Select the GitHub account or organization**
-   - Choose the account/org where the repository should be created.
+- Migration files are re-run in timestamp order against the new project; each `CREATE TABLE public.*` already carries its `GRANT` + RLS + policy block, so no rewrite is needed.
+- If any migration fails because it was written against drifted state on the old project, it is fixed in place and re-applied.
+- `src/integrations/supabase/types.ts` is regenerated from the new database.
+- Server code (`createServerFn`, `client.server.ts`, auth middleware) needs no changes — it reads `process.env` values that Cloud injects.
 
-4. **Create the repository**
-   - In Lovable, click **Create Repository** to create the new GitHub repo and push the current project code.
+## Before I start
 
-5. **Verify the sync**
-   - Confirm the new GitHub repository shows the project files (including `src/routes/index.tsx`, `package.json`, `README.md`, etc.).
-   - Confirm that future changes in Lovable commit to GitHub and that changes pushed to GitHub sync back to Lovable.
-
-## What this will NOT do
-- It will not pull code from an existing external GitHub repo (e.g., `dharmastay`). If you need that codebase in Lovable, it must be manually rebuilt as a separate project plan.
-
-## Expected outcome
-- A new GitHub repository exists containing the current Lovable project.
-- Two-way sync is active between Lovable and GitHub.
-- The project is no longer only stored in Lovable's private git storage.
+Confirm you accept an empty database (option: I can also extract the current data as SQL inserts first, if you can grant access to the old project).
