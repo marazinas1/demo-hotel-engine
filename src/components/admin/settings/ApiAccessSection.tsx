@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Copy, KeyRound, Loader2, Plus, Trash2 } from "lucide-react";
@@ -21,32 +21,77 @@ import {
   deleteApiClient,
 } from "@/lib/api-keys.functions";
 
-const LOVABLE_PROJECT_ID = "3b144e50-7336-4c5e-a93d-7aeca70328ba";
 const API_PATH = "/api/public/v1";
+const UUID_RE = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
 
-const BASE_URLS = [
-  {
-    envVar: "RENTIVO_API_URL_PROD",
-    label: "Gamybinė aplinka (publikuota versija)",
-    url: `https://dharmastay.lovable.app${API_PATH}`,
-    hint: "Šį adresą naudoja realūs klientai.",
-    alt: {
-      label: "Alternatyva — stabilus techninis adresas (nesikeis pervadinus projektą)",
-      url: `https://project--${LOVABLE_PROJECT_ID}.lovable.app${API_PATH}`,
-    },
-  },
-  {
-    envVar: "RENTIVO_API_URL_DEV",
-    label: "Testavimo (peržiūros) aplinka",
-    url: `https://project--${LOVABLE_PROJECT_ID}-dev.lovable.app${API_PATH}`,
-    hint: "Privalo turėti „-dev“. Be jo testai rašys į realius duomenis.",
-  },
-] as const;
+/** Lovable projekto ID nuskaitomas iš dabartinio adreso (preview / project / dev). */
+function detectProjectId(): string | null {
+  if (typeof window === "undefined") return null;
+  const m = UUID_RE.exec(window.location.hostname);
+  return m ? m[0] : null;
+}
+
+/** Publikuotas (arba custom domain) adresas — kai atidaryta ne iš peržiūros lango. */
+function detectPublishedOrigin(): string | null {
+  if (typeof window === "undefined") return null;
+  const host = window.location.hostname;
+  if (host.includes("-preview--") || host.endsWith("-dev.lovable.app")) return null;
+  if (host === "localhost" || host === "127.0.0.1") return null;
+  return window.location.origin;
+}
+
+type BaseUrlItem = {
+  envVar: string;
+  label: string;
+  url: string;
+  hint: string;
+  alt?: { label: string; url: string };
+};
+
+function buildBaseUrls(): BaseUrlItem[] {
+  const projectId = detectProjectId();
+  const published = detectPublishedOrigin();
+  const stableProd = projectId ? `https://project--${projectId}.lovable.app${API_PATH}` : null;
+  const stableDev = projectId ? `https://project--${projectId}-dev.lovable.app${API_PATH}` : null;
+
+  const items: BaseUrlItem[] = [];
+
+  const prodUrl = published ? `${published}${API_PATH}` : stableProd;
+  if (prodUrl) {
+    items.push({
+      envVar: "RENTIVO_API_URL_PROD",
+      label: "Gamybinė aplinka (publikuota versija)",
+      url: prodUrl,
+      hint: "Šį adresą naudoja realūs klientai.",
+      ...(published && stableProd && stableProd !== prodUrl
+        ? {
+            alt: {
+              label:
+                "Alternatyva — stabilus techninis adresas (nesikeis pervadinus projektą)",
+              url: stableProd,
+            },
+          }
+        : {}),
+    });
+  }
+
+  if (stableDev) {
+    items.push({
+      envVar: "RENTIVO_API_URL_DEV",
+      label: "Testavimo (peržiūros) aplinka",
+      url: stableDev,
+      hint: "Privalo turėti „-dev“. Be jo testai rašys į realius duomenis.",
+    });
+  }
+
+  return items;
+}
 
 function isPreviewWindow(): boolean {
   if (typeof window === "undefined") return false;
   return !window.location.origin.includes(".lovable.app");
 }
+
 
 export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
   const qc = useQueryClient();
@@ -58,6 +103,11 @@ export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
   const [name, setName] = useState("");
   const [origins, setOrigins] = useState("");
   const [newKey, setNewKey] = useState<string | null>(null);
+  const [baseUrls, setBaseUrls] = useState<BaseUrlItem[]>([]);
+
+  // Adresai priklauso nuo naršyklės adreso — skaičiuojame tik po hidratacijos.
+  useEffect(() => setBaseUrls(buildBaseUrls()), []);
+
 
   const { data: clients, isLoading } = useQuery({
     queryKey: ["api-clients"],
@@ -149,7 +199,9 @@ export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
           <p className="text-xs text-muted-foreground">
             Šiuos du kintamuosius perduokite klientinei svetainei.
           </p>
-          {BASE_URLS.map((item) => (
+          {baseUrls.map((item) => {
+            const alt = item.alt;
+            return (
             <div key={item.envVar} className="rounded-md border bg-background/50 p-3">
               <p className="text-xs font-semibold">{item.envVar}</p>
               <p className="text-[11px] text-muted-foreground">{item.label}</p>
@@ -162,18 +214,18 @@ export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
                 </Button>
               </div>
               <p className="mt-1 text-[11px] text-muted-foreground">{item.hint}</p>
-              {"alt" in item && item.alt && (
+              {alt && (
                 <div className="mt-2 border-t pt-2">
-                  <p className="text-[11px] text-muted-foreground">{item.alt.label}</p>
+                  <p className="text-[11px] text-muted-foreground">{alt.label}</p>
                   <div className="mt-1 flex items-start gap-2">
                     <code className="min-w-0 flex-1 break-all rounded bg-background px-2 py-1 text-[11px]">
-                      {item.alt.url}
+                      {alt.url}
                     </code>
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => copy(item.alt.url)}
+                      onClick={() => copy(alt.url)}
                     >
                       <Copy className="h-3.5 w-3.5" />
                     </Button>
@@ -181,7 +233,9 @@ export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
+
           {isPreviewWindow() && (
             <p className="rounded border border-amber-500/40 bg-amber-500/10 px-2 py-1.5 text-[11px] text-amber-700 dark:text-amber-400">
               Dabar esate peržiūros lange — nekopijuokite naršyklės adreso, naudokite gamybinį
