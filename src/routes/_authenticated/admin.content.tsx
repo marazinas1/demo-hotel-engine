@@ -18,7 +18,6 @@ import {
 } from "@/lib/content-templates";
 import { ContentTemplateCard } from "@/components/admin/content/ContentTemplateCard";
 import {
-import { APP_ADMIN_NAME } from "@/lib/branding";
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -28,6 +27,7 @@ import { APP_ADMIN_NAME } from "@/lib/branding";
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { APP_ADMIN_NAME } from "@/lib/branding";
 
 export const Route = createFileRoute("/_authenticated/admin/content")({
   component: ContentPage,
