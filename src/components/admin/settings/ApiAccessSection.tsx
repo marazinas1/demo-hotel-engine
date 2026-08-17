@@ -194,7 +194,9 @@ export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
           <p className="text-xs text-muted-foreground">
             Šiuos du kintamuosius perduokite klientinei svetainei.
           </p>
-          {BASE_URLS.map((item) => (
+          {baseUrls.map((item) => {
+            const alt = item.alt;
+            return (
             <div key={item.envVar} className="rounded-md border bg-background/50 p-3">
               <p className="text-xs font-semibold">{item.envVar}</p>
               <p className="text-[11px] text-muted-foreground">{item.label}</p>
@@ -207,18 +209,18 @@ export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
                 </Button>
               </div>
               <p className="mt-1 text-[11px] text-muted-foreground">{item.hint}</p>
-              {"alt" in item && item.alt && (
+              {alt && (
                 <div className="mt-2 border-t pt-2">
-                  <p className="text-[11px] text-muted-foreground">{item.alt.label}</p>
+                  <p className="text-[11px] text-muted-foreground">{alt.label}</p>
                   <div className="mt-1 flex items-start gap-2">
                     <code className="min-w-0 flex-1 break-all rounded bg-background px-2 py-1 text-[11px]">
-                      {item.alt.url}
+                      {alt.url}
                     </code>
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => copy(item.alt.url)}
+                      onClick={() => copy(alt.url)}
                     >
                       <Copy className="h-3.5 w-3.5" />
                     </Button>
@@ -226,7 +228,9 @@ export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
+
           {isPreviewWindow() && (
             <p className="rounded border border-amber-500/40 bg-amber-500/10 px-2 py-1.5 text-[11px] text-amber-700 dark:text-amber-400">
               Dabar esate peržiūros lange — nekopijuokite naršyklės adreso, naudokite gamybinį
