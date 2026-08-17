@@ -10,33 +10,438 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedStaffRouteImport } from './routes/_authenticated/staff'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
+import { Route as AuthenticatedAdminContractsRouteImport } from './routes/_authenticated/admin.contracts'
+import { Route as AuthenticatedAdminExpensesRouteImport } from './routes/_authenticated/admin.expenses'
+import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
+import { Route as AuthenticatedStaffIndexRouteImport } from './routes/_authenticated/staff.index'
+import { Route as AuthenticatedStaffIdRouteImport } from './routes/_authenticated/staff.$id'
+import { Route as ApiPublicIcalSyncRouteImport } from './routes/api/public/ical-sync'
+import { Route as ApiPublicNotificationsCronRouteImport } from './routes/api/public/notifications-cron'
+import { Route as AuthenticatedAdminBookingsIndexRouteImport } from './routes/_authenticated/admin.bookings.index'
+import { Route as AuthenticatedAdminBookingsIdRouteImport } from './routes/_authenticated/admin.bookings.$id'
+import { Route as AuthenticatedAdminBookingsNewRouteImport } from './routes/_authenticated/admin.bookings.new'
+import { Route as AuthenticatedAdminPropertiesIndexRouteImport } from './routes/_authenticated/admin.properties.index'
+import { Route as AuthenticatedAdminPropertiesNewRouteImport } from './routes/_authenticated/admin.properties.new'
+import { Route as ApiPublicV1AvailabilityRouteImport } from './routes/api/public/v1/availability'
+import { Route as ApiPublicV1BookingsRouteImport } from './routes/api/public/v1/bookings'
+import { Route as ApiPublicV1LegalRouteImport } from './routes/api/public/v1/legal'
+import { Route as ApiPublicV1PaymentDetailsRouteImport } from './routes/api/public/v1/payment-details'
+import { Route as ApiPublicV1PropertiesRouteImport } from './routes/api/public/v1/properties'
+import { Route as ApiPublicV1QuoteRouteImport } from './routes/api/public/v1/quote'
+import { Route as ApiStaffV1RoomsRouteImport } from './routes/api/staff/v1/rooms'
+import { Route as AuthenticatedAdminPropertiesIdEditRouteImport } from './routes/_authenticated/admin.properties.$id.edit'
+import { Route as ApiPublicV1BookingsBookingNumberRouteImport } from './routes/api/public/v1/bookings.$bookingNumber'
+import { Route as ApiPublicV1PropertiesIdRouteImport } from './routes/api/public/v1/properties.$id'
+import { Route as ApiStaffV1RoomsIdAssignRouteImport } from './routes/api/staff/v1/rooms.$id.assign'
+import { Route as ApiStaffV1RoomsIdStatusRouteImport } from './routes/api/staff/v1/rooms.$id.status'
+import { Route as ApiStaffV1RoomsIdUnassignRouteImport } from './routes/api/staff/v1/rooms.$id.unassign'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedStaffRoute = AuthenticatedStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminContentRoute =
+  AuthenticatedAdminContentRouteImport.update({
+    id: '/content',
+    path: '/content',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminContractsRoute =
+  AuthenticatedAdminContractsRouteImport.update({
+    id: '/contracts',
+    path: '/contracts',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminExpensesRoute =
+  AuthenticatedAdminExpensesRouteImport.update({
+    id: '/expenses',
+    path: '/expenses',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSettingsRoute =
+  AuthenticatedAdminSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedStaffIndexRoute = AuthenticatedStaffIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedStaffRoute,
+} as any)
+const AuthenticatedStaffIdRoute = AuthenticatedStaffIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedStaffRoute,
+} as any)
+const ApiPublicIcalSyncRoute = ApiPublicIcalSyncRouteImport.update({
+  id: '/api/public/ical-sync',
+  path: '/api/public/ical-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicNotificationsCronRoute =
+  ApiPublicNotificationsCronRouteImport.update({
+    id: '/api/public/notifications-cron',
+    path: '/api/public/notifications-cron',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedAdminBookingsIndexRoute =
+  AuthenticatedAdminBookingsIndexRouteImport.update({
+    id: '/bookings/',
+    path: '/bookings/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminBookingsIdRoute =
+  AuthenticatedAdminBookingsIdRouteImport.update({
+    id: '/bookings/$id',
+    path: '/bookings/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminBookingsNewRoute =
+  AuthenticatedAdminBookingsNewRouteImport.update({
+    id: '/bookings/new',
+    path: '/bookings/new',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPropertiesIndexRoute =
+  AuthenticatedAdminPropertiesIndexRouteImport.update({
+    id: '/properties/',
+    path: '/properties/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPropertiesNewRoute =
+  AuthenticatedAdminPropertiesNewRouteImport.update({
+    id: '/properties/new',
+    path: '/properties/new',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const ApiPublicV1AvailabilityRoute = ApiPublicV1AvailabilityRouteImport.update({
+  id: '/api/public/v1/availability',
+  path: '/api/public/v1/availability',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1BookingsRoute = ApiPublicV1BookingsRouteImport.update({
+  id: '/api/public/v1/bookings',
+  path: '/api/public/v1/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1LegalRoute = ApiPublicV1LegalRouteImport.update({
+  id: '/api/public/v1/legal',
+  path: '/api/public/v1/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1PaymentDetailsRoute =
+  ApiPublicV1PaymentDetailsRouteImport.update({
+    id: '/api/public/v1/payment-details',
+    path: '/api/public/v1/payment-details',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1PropertiesRoute = ApiPublicV1PropertiesRouteImport.update({
+  id: '/api/public/v1/properties',
+  path: '/api/public/v1/properties',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1QuoteRoute = ApiPublicV1QuoteRouteImport.update({
+  id: '/api/public/v1/quote',
+  path: '/api/public/v1/quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStaffV1RoomsRoute = ApiStaffV1RoomsRouteImport.update({
+  id: '/api/staff/v1/rooms',
+  path: '/api/staff/v1/rooms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminPropertiesIdEditRoute =
+  AuthenticatedAdminPropertiesIdEditRouteImport.update({
+    id: '/properties/$id/edit',
+    path: '/properties/$id/edit',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const ApiPublicV1BookingsBookingNumberRoute =
+  ApiPublicV1BookingsBookingNumberRouteImport.update({
+    id: '/$bookingNumber',
+    path: '/$bookingNumber',
+    getParentRoute: () => ApiPublicV1BookingsRoute,
+  } as any)
+const ApiPublicV1PropertiesIdRoute = ApiPublicV1PropertiesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiPublicV1PropertiesRoute,
+} as any)
+const ApiStaffV1RoomsIdAssignRoute = ApiStaffV1RoomsIdAssignRouteImport.update({
+  id: '/$id/assign',
+  path: '/$id/assign',
+  getParentRoute: () => ApiStaffV1RoomsRoute,
+} as any)
+const ApiStaffV1RoomsIdStatusRoute = ApiStaffV1RoomsIdStatusRouteImport.update({
+  id: '/$id/status',
+  path: '/$id/status',
+  getParentRoute: () => ApiStaffV1RoomsRoute,
+} as any)
+const ApiStaffV1RoomsIdUnassignRoute =
+  ApiStaffV1RoomsIdUnassignRouteImport.update({
+    id: '/$id/unassign',
+    path: '/$id/unassign',
+    getParentRoute: () => ApiStaffV1RoomsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/staff': typeof AuthenticatedStaffRouteWithChildren
+  '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/contracts': typeof AuthenticatedAdminContractsRoute
+  '/admin/expenses': typeof AuthenticatedAdminExpensesRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/staff/$id': typeof AuthenticatedStaffIdRoute
+  '/api/public/ical-sync': typeof ApiPublicIcalSyncRoute
+  '/api/public/notifications-cron': typeof ApiPublicNotificationsCronRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/staff/': typeof AuthenticatedStaffIndexRoute
+  '/admin/bookings/$id': typeof AuthenticatedAdminBookingsIdRoute
+  '/admin/bookings/new': typeof AuthenticatedAdminBookingsNewRoute
+  '/admin/properties/new': typeof AuthenticatedAdminPropertiesNewRoute
+  '/api/public/v1/availability': typeof ApiPublicV1AvailabilityRoute
+  '/api/public/v1/bookings': typeof ApiPublicV1BookingsRouteWithChildren
+  '/api/public/v1/legal': typeof ApiPublicV1LegalRoute
+  '/api/public/v1/payment-details': typeof ApiPublicV1PaymentDetailsRoute
+  '/api/public/v1/properties': typeof ApiPublicV1PropertiesRouteWithChildren
+  '/api/public/v1/quote': typeof ApiPublicV1QuoteRoute
+  '/api/staff/v1/rooms': typeof ApiStaffV1RoomsRouteWithChildren
+  '/admin/bookings/': typeof AuthenticatedAdminBookingsIndexRoute
+  '/admin/properties/': typeof AuthenticatedAdminPropertiesIndexRoute
+  '/admin/properties/$id/edit': typeof AuthenticatedAdminPropertiesIdEditRoute
+  '/api/public/v1/bookings/$bookingNumber': typeof ApiPublicV1BookingsBookingNumberRoute
+  '/api/public/v1/properties/$id': typeof ApiPublicV1PropertiesIdRoute
+  '/api/staff/v1/rooms/$id/assign': typeof ApiStaffV1RoomsIdAssignRoute
+  '/api/staff/v1/rooms/$id/status': typeof ApiStaffV1RoomsIdStatusRoute
+  '/api/staff/v1/rooms/$id/unassign': typeof ApiStaffV1RoomsIdUnassignRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/contracts': typeof AuthenticatedAdminContractsRoute
+  '/admin/expenses': typeof AuthenticatedAdminExpensesRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/staff/$id': typeof AuthenticatedStaffIdRoute
+  '/api/public/ical-sync': typeof ApiPublicIcalSyncRoute
+  '/api/public/notifications-cron': typeof ApiPublicNotificationsCronRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/staff': typeof AuthenticatedStaffIndexRoute
+  '/admin/bookings/$id': typeof AuthenticatedAdminBookingsIdRoute
+  '/admin/bookings/new': typeof AuthenticatedAdminBookingsNewRoute
+  '/admin/properties/new': typeof AuthenticatedAdminPropertiesNewRoute
+  '/api/public/v1/availability': typeof ApiPublicV1AvailabilityRoute
+  '/api/public/v1/bookings': typeof ApiPublicV1BookingsRouteWithChildren
+  '/api/public/v1/legal': typeof ApiPublicV1LegalRoute
+  '/api/public/v1/payment-details': typeof ApiPublicV1PaymentDetailsRoute
+  '/api/public/v1/properties': typeof ApiPublicV1PropertiesRouteWithChildren
+  '/api/public/v1/quote': typeof ApiPublicV1QuoteRoute
+  '/api/staff/v1/rooms': typeof ApiStaffV1RoomsRouteWithChildren
+  '/admin/bookings': typeof AuthenticatedAdminBookingsIndexRoute
+  '/admin/properties': typeof AuthenticatedAdminPropertiesIndexRoute
+  '/admin/properties/$id/edit': typeof AuthenticatedAdminPropertiesIdEditRoute
+  '/api/public/v1/bookings/$bookingNumber': typeof ApiPublicV1BookingsBookingNumberRoute
+  '/api/public/v1/properties/$id': typeof ApiPublicV1PropertiesIdRoute
+  '/api/staff/v1/rooms/$id/assign': typeof ApiStaffV1RoomsIdAssignRoute
+  '/api/staff/v1/rooms/$id/status': typeof ApiStaffV1RoomsIdStatusRoute
+  '/api/staff/v1/rooms/$id/unassign': typeof ApiStaffV1RoomsIdUnassignRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/staff': typeof AuthenticatedStaffRouteWithChildren
+  '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
+  '/_authenticated/admin/contracts': typeof AuthenticatedAdminContractsRoute
+  '/_authenticated/admin/expenses': typeof AuthenticatedAdminExpensesRoute
+  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/staff/$id': typeof AuthenticatedStaffIdRoute
+  '/api/public/ical-sync': typeof ApiPublicIcalSyncRoute
+  '/api/public/notifications-cron': typeof ApiPublicNotificationsCronRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/staff/': typeof AuthenticatedStaffIndexRoute
+  '/_authenticated/admin/bookings/$id': typeof AuthenticatedAdminBookingsIdRoute
+  '/_authenticated/admin/bookings/new': typeof AuthenticatedAdminBookingsNewRoute
+  '/_authenticated/admin/properties/new': typeof AuthenticatedAdminPropertiesNewRoute
+  '/api/public/v1/availability': typeof ApiPublicV1AvailabilityRoute
+  '/api/public/v1/bookings': typeof ApiPublicV1BookingsRouteWithChildren
+  '/api/public/v1/legal': typeof ApiPublicV1LegalRoute
+  '/api/public/v1/payment-details': typeof ApiPublicV1PaymentDetailsRoute
+  '/api/public/v1/properties': typeof ApiPublicV1PropertiesRouteWithChildren
+  '/api/public/v1/quote': typeof ApiPublicV1QuoteRoute
+  '/api/staff/v1/rooms': typeof ApiStaffV1RoomsRouteWithChildren
+  '/_authenticated/admin/bookings/': typeof AuthenticatedAdminBookingsIndexRoute
+  '/_authenticated/admin/properties/': typeof AuthenticatedAdminPropertiesIndexRoute
+  '/_authenticated/admin/properties/$id/edit': typeof AuthenticatedAdminPropertiesIdEditRoute
+  '/api/public/v1/bookings/$bookingNumber': typeof ApiPublicV1BookingsBookingNumberRoute
+  '/api/public/v1/properties/$id': typeof ApiPublicV1PropertiesIdRoute
+  '/api/staff/v1/rooms/$id/assign': typeof ApiStaffV1RoomsIdAssignRoute
+  '/api/staff/v1/rooms/$id/status': typeof ApiStaffV1RoomsIdStatusRoute
+  '/api/staff/v1/rooms/$id/unassign': typeof ApiStaffV1RoomsIdUnassignRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/admin'
+    | '/staff'
+    | '/admin/content'
+    | '/admin/contracts'
+    | '/admin/expenses'
+    | '/admin/settings'
+    | '/staff/$id'
+    | '/api/public/ical-sync'
+    | '/api/public/notifications-cron'
+    | '/admin/'
+    | '/staff/'
+    | '/admin/bookings/$id'
+    | '/admin/bookings/new'
+    | '/admin/properties/new'
+    | '/api/public/v1/availability'
+    | '/api/public/v1/bookings'
+    | '/api/public/v1/legal'
+    | '/api/public/v1/payment-details'
+    | '/api/public/v1/properties'
+    | '/api/public/v1/quote'
+    | '/api/staff/v1/rooms'
+    | '/admin/bookings/'
+    | '/admin/properties/'
+    | '/admin/properties/$id/edit'
+    | '/api/public/v1/bookings/$bookingNumber'
+    | '/api/public/v1/properties/$id'
+    | '/api/staff/v1/rooms/$id/assign'
+    | '/api/staff/v1/rooms/$id/status'
+    | '/api/staff/v1/rooms/$id/unassign'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/admin/content'
+    | '/admin/contracts'
+    | '/admin/expenses'
+    | '/admin/settings'
+    | '/staff/$id'
+    | '/api/public/ical-sync'
+    | '/api/public/notifications-cron'
+    | '/admin'
+    | '/staff'
+    | '/admin/bookings/$id'
+    | '/admin/bookings/new'
+    | '/admin/properties/new'
+    | '/api/public/v1/availability'
+    | '/api/public/v1/bookings'
+    | '/api/public/v1/legal'
+    | '/api/public/v1/payment-details'
+    | '/api/public/v1/properties'
+    | '/api/public/v1/quote'
+    | '/api/staff/v1/rooms'
+    | '/admin/bookings'
+    | '/admin/properties'
+    | '/admin/properties/$id/edit'
+    | '/api/public/v1/bookings/$bookingNumber'
+    | '/api/public/v1/properties/$id'
+    | '/api/staff/v1/rooms/$id/assign'
+    | '/api/staff/v1/rooms/$id/status'
+    | '/api/staff/v1/rooms/$id/unassign'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/reset-password'
+    | '/_authenticated/admin'
+    | '/_authenticated/staff'
+    | '/_authenticated/admin/content'
+    | '/_authenticated/admin/contracts'
+    | '/_authenticated/admin/expenses'
+    | '/_authenticated/admin/settings'
+    | '/_authenticated/staff/$id'
+    | '/api/public/ical-sync'
+    | '/api/public/notifications-cron'
+    | '/_authenticated/admin/'
+    | '/_authenticated/staff/'
+    | '/_authenticated/admin/bookings/$id'
+    | '/_authenticated/admin/bookings/new'
+    | '/_authenticated/admin/properties/new'
+    | '/api/public/v1/availability'
+    | '/api/public/v1/bookings'
+    | '/api/public/v1/legal'
+    | '/api/public/v1/payment-details'
+    | '/api/public/v1/properties'
+    | '/api/public/v1/quote'
+    | '/api/staff/v1/rooms'
+    | '/_authenticated/admin/bookings/'
+    | '/_authenticated/admin/properties/'
+    | '/_authenticated/admin/properties/$id/edit'
+    | '/api/public/v1/bookings/$bookingNumber'
+    | '/api/public/v1/properties/$id'
+    | '/api/staff/v1/rooms/$id/assign'
+    | '/api/staff/v1/rooms/$id/status'
+    | '/api/staff/v1/rooms/$id/unassign'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicIcalSyncRoute: typeof ApiPublicIcalSyncRoute
+  ApiPublicNotificationsCronRoute: typeof ApiPublicNotificationsCronRoute
+  ApiPublicV1AvailabilityRoute: typeof ApiPublicV1AvailabilityRoute
+  ApiPublicV1BookingsRoute: typeof ApiPublicV1BookingsRouteWithChildren
+  ApiPublicV1LegalRoute: typeof ApiPublicV1LegalRoute
+  ApiPublicV1PaymentDetailsRoute: typeof ApiPublicV1PaymentDetailsRoute
+  ApiPublicV1PropertiesRoute: typeof ApiPublicV1PropertiesRouteWithChildren
+  ApiPublicV1QuoteRoute: typeof ApiPublicV1QuoteRoute
+  ApiStaffV1RoomsRoute: typeof ApiStaffV1RoomsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +453,347 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/staff': {
+      id: '/_authenticated/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof AuthenticatedStaffRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/content': {
+      id: '/_authenticated/admin/content'
+      path: '/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AuthenticatedAdminContentRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/contracts': {
+      id: '/_authenticated/admin/contracts'
+      path: '/contracts'
+      fullPath: '/admin/contracts'
+      preLoaderRoute: typeof AuthenticatedAdminContractsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/expenses': {
+      id: '/_authenticated/admin/expenses'
+      path: '/expenses'
+      fullPath: '/admin/expenses'
+      preLoaderRoute: typeof AuthenticatedAdminExpensesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/settings': {
+      id: '/_authenticated/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/staff/': {
+      id: '/_authenticated/staff/'
+      path: '/'
+      fullPath: '/staff/'
+      preLoaderRoute: typeof AuthenticatedStaffIndexRouteImport
+      parentRoute: typeof AuthenticatedStaffRoute
+    }
+    '/_authenticated/staff/$id': {
+      id: '/_authenticated/staff/$id'
+      path: '/$id'
+      fullPath: '/staff/$id'
+      preLoaderRoute: typeof AuthenticatedStaffIdRouteImport
+      parentRoute: typeof AuthenticatedStaffRoute
+    }
+    '/api/public/ical-sync': {
+      id: '/api/public/ical-sync'
+      path: '/api/public/ical-sync'
+      fullPath: '/api/public/ical-sync'
+      preLoaderRoute: typeof ApiPublicIcalSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/notifications-cron': {
+      id: '/api/public/notifications-cron'
+      path: '/api/public/notifications-cron'
+      fullPath: '/api/public/notifications-cron'
+      preLoaderRoute: typeof ApiPublicNotificationsCronRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/bookings/': {
+      id: '/_authenticated/admin/bookings/'
+      path: '/bookings'
+      fullPath: '/admin/bookings/'
+      preLoaderRoute: typeof AuthenticatedAdminBookingsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/bookings/$id': {
+      id: '/_authenticated/admin/bookings/$id'
+      path: '/bookings/$id'
+      fullPath: '/admin/bookings/$id'
+      preLoaderRoute: typeof AuthenticatedAdminBookingsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/bookings/new': {
+      id: '/_authenticated/admin/bookings/new'
+      path: '/bookings/new'
+      fullPath: '/admin/bookings/new'
+      preLoaderRoute: typeof AuthenticatedAdminBookingsNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/properties/': {
+      id: '/_authenticated/admin/properties/'
+      path: '/properties'
+      fullPath: '/admin/properties/'
+      preLoaderRoute: typeof AuthenticatedAdminPropertiesIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/properties/new': {
+      id: '/_authenticated/admin/properties/new'
+      path: '/properties/new'
+      fullPath: '/admin/properties/new'
+      preLoaderRoute: typeof AuthenticatedAdminPropertiesNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/api/public/v1/availability': {
+      id: '/api/public/v1/availability'
+      path: '/api/public/v1/availability'
+      fullPath: '/api/public/v1/availability'
+      preLoaderRoute: typeof ApiPublicV1AvailabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/bookings': {
+      id: '/api/public/v1/bookings'
+      path: '/api/public/v1/bookings'
+      fullPath: '/api/public/v1/bookings'
+      preLoaderRoute: typeof ApiPublicV1BookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/legal': {
+      id: '/api/public/v1/legal'
+      path: '/api/public/v1/legal'
+      fullPath: '/api/public/v1/legal'
+      preLoaderRoute: typeof ApiPublicV1LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/payment-details': {
+      id: '/api/public/v1/payment-details'
+      path: '/api/public/v1/payment-details'
+      fullPath: '/api/public/v1/payment-details'
+      preLoaderRoute: typeof ApiPublicV1PaymentDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/properties': {
+      id: '/api/public/v1/properties'
+      path: '/api/public/v1/properties'
+      fullPath: '/api/public/v1/properties'
+      preLoaderRoute: typeof ApiPublicV1PropertiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/quote': {
+      id: '/api/public/v1/quote'
+      path: '/api/public/v1/quote'
+      fullPath: '/api/public/v1/quote'
+      preLoaderRoute: typeof ApiPublicV1QuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/staff/v1/rooms': {
+      id: '/api/staff/v1/rooms'
+      path: '/api/staff/v1/rooms'
+      fullPath: '/api/staff/v1/rooms'
+      preLoaderRoute: typeof ApiStaffV1RoomsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/properties/$id/edit': {
+      id: '/_authenticated/admin/properties/$id/edit'
+      path: '/properties/$id/edit'
+      fullPath: '/admin/properties/$id/edit'
+      preLoaderRoute: typeof AuthenticatedAdminPropertiesIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/api/public/v1/bookings/$bookingNumber': {
+      id: '/api/public/v1/bookings/$bookingNumber'
+      path: '/$bookingNumber'
+      fullPath: '/api/public/v1/bookings/$bookingNumber'
+      preLoaderRoute: typeof ApiPublicV1BookingsBookingNumberRouteImport
+      parentRoute: typeof ApiPublicV1BookingsRoute
+    }
+    '/api/public/v1/properties/$id': {
+      id: '/api/public/v1/properties/$id'
+      path: '/$id'
+      fullPath: '/api/public/v1/properties/$id'
+      preLoaderRoute: typeof ApiPublicV1PropertiesIdRouteImport
+      parentRoute: typeof ApiPublicV1PropertiesRoute
+    }
+    '/api/staff/v1/rooms/$id/assign': {
+      id: '/api/staff/v1/rooms/$id/assign'
+      path: '/$id/assign'
+      fullPath: '/api/staff/v1/rooms/$id/assign'
+      preLoaderRoute: typeof ApiStaffV1RoomsIdAssignRouteImport
+      parentRoute: typeof ApiStaffV1RoomsRoute
+    }
+    '/api/staff/v1/rooms/$id/status': {
+      id: '/api/staff/v1/rooms/$id/status'
+      path: '/$id/status'
+      fullPath: '/api/staff/v1/rooms/$id/status'
+      preLoaderRoute: typeof ApiStaffV1RoomsIdStatusRouteImport
+      parentRoute: typeof ApiStaffV1RoomsRoute
+    }
+    '/api/staff/v1/rooms/$id/unassign': {
+      id: '/api/staff/v1/rooms/$id/unassign'
+      path: '/$id/unassign'
+      fullPath: '/api/staff/v1/rooms/$id/unassign'
+      preLoaderRoute: typeof ApiStaffV1RoomsIdUnassignRouteImport
+      parentRoute: typeof ApiStaffV1RoomsRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
+  AuthenticatedAdminContractsRoute: typeof AuthenticatedAdminContractsRoute
+  AuthenticatedAdminExpensesRoute: typeof AuthenticatedAdminExpensesRoute
+  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminBookingsIdRoute: typeof AuthenticatedAdminBookingsIdRoute
+  AuthenticatedAdminBookingsNewRoute: typeof AuthenticatedAdminBookingsNewRoute
+  AuthenticatedAdminPropertiesNewRoute: typeof AuthenticatedAdminPropertiesNewRoute
+  AuthenticatedAdminBookingsIndexRoute: typeof AuthenticatedAdminBookingsIndexRoute
+  AuthenticatedAdminPropertiesIndexRoute: typeof AuthenticatedAdminPropertiesIndexRoute
+  AuthenticatedAdminPropertiesIdEditRoute: typeof AuthenticatedAdminPropertiesIdEditRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
+  AuthenticatedAdminContractsRoute: AuthenticatedAdminContractsRoute,
+  AuthenticatedAdminExpensesRoute: AuthenticatedAdminExpensesRoute,
+  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminBookingsIdRoute: AuthenticatedAdminBookingsIdRoute,
+  AuthenticatedAdminBookingsNewRoute: AuthenticatedAdminBookingsNewRoute,
+  AuthenticatedAdminPropertiesNewRoute: AuthenticatedAdminPropertiesNewRoute,
+  AuthenticatedAdminBookingsIndexRoute: AuthenticatedAdminBookingsIndexRoute,
+  AuthenticatedAdminPropertiesIndexRoute:
+    AuthenticatedAdminPropertiesIndexRoute,
+  AuthenticatedAdminPropertiesIdEditRoute:
+    AuthenticatedAdminPropertiesIdEditRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedStaffRouteChildren {
+  AuthenticatedStaffIdRoute: typeof AuthenticatedStaffIdRoute
+  AuthenticatedStaffIndexRoute: typeof AuthenticatedStaffIndexRoute
+}
+
+const AuthenticatedStaffRouteChildren: AuthenticatedStaffRouteChildren = {
+  AuthenticatedStaffIdRoute: AuthenticatedStaffIdRoute,
+  AuthenticatedStaffIndexRoute: AuthenticatedStaffIndexRoute,
+}
+
+const AuthenticatedStaffRouteWithChildren =
+  AuthenticatedStaffRoute._addFileChildren(AuthenticatedStaffRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedStaffRoute: typeof AuthenticatedStaffRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedStaffRoute: AuthenticatedStaffRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+interface ApiPublicV1BookingsRouteChildren {
+  ApiPublicV1BookingsBookingNumberRoute: typeof ApiPublicV1BookingsBookingNumberRoute
+}
+
+const ApiPublicV1BookingsRouteChildren: ApiPublicV1BookingsRouteChildren = {
+  ApiPublicV1BookingsBookingNumberRoute: ApiPublicV1BookingsBookingNumberRoute,
+}
+
+const ApiPublicV1BookingsRouteWithChildren =
+  ApiPublicV1BookingsRoute._addFileChildren(ApiPublicV1BookingsRouteChildren)
+
+interface ApiPublicV1PropertiesRouteChildren {
+  ApiPublicV1PropertiesIdRoute: typeof ApiPublicV1PropertiesIdRoute
+}
+
+const ApiPublicV1PropertiesRouteChildren: ApiPublicV1PropertiesRouteChildren = {
+  ApiPublicV1PropertiesIdRoute: ApiPublicV1PropertiesIdRoute,
+}
+
+const ApiPublicV1PropertiesRouteWithChildren =
+  ApiPublicV1PropertiesRoute._addFileChildren(
+    ApiPublicV1PropertiesRouteChildren,
+  )
+
+interface ApiStaffV1RoomsRouteChildren {
+  ApiStaffV1RoomsIdAssignRoute: typeof ApiStaffV1RoomsIdAssignRoute
+  ApiStaffV1RoomsIdStatusRoute: typeof ApiStaffV1RoomsIdStatusRoute
+  ApiStaffV1RoomsIdUnassignRoute: typeof ApiStaffV1RoomsIdUnassignRoute
+}
+
+const ApiStaffV1RoomsRouteChildren: ApiStaffV1RoomsRouteChildren = {
+  ApiStaffV1RoomsIdAssignRoute: ApiStaffV1RoomsIdAssignRoute,
+  ApiStaffV1RoomsIdStatusRoute: ApiStaffV1RoomsIdStatusRoute,
+  ApiStaffV1RoomsIdUnassignRoute: ApiStaffV1RoomsIdUnassignRoute,
+}
+
+const ApiStaffV1RoomsRouteWithChildren = ApiStaffV1RoomsRoute._addFileChildren(
+  ApiStaffV1RoomsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicIcalSyncRoute: ApiPublicIcalSyncRoute,
+  ApiPublicNotificationsCronRoute: ApiPublicNotificationsCronRoute,
+  ApiPublicV1AvailabilityRoute: ApiPublicV1AvailabilityRoute,
+  ApiPublicV1BookingsRoute: ApiPublicV1BookingsRouteWithChildren,
+  ApiPublicV1LegalRoute: ApiPublicV1LegalRoute,
+  ApiPublicV1PaymentDetailsRoute: ApiPublicV1PaymentDetailsRoute,
+  ApiPublicV1PropertiesRoute: ApiPublicV1PropertiesRouteWithChildren,
+  ApiPublicV1QuoteRoute: ApiPublicV1QuoteRoute,
+  ApiStaffV1RoomsRoute: ApiStaffV1RoomsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

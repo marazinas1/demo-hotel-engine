@@ -1,12 +1,14 @@
-# demo-hotel-engine
+# Rentivo for Property rent
 
-Noriu paklausti, ar tu gali perkelti is github visa projekta i lovable aplinka? stai sis projektas - https://github.com/kestpuplauskas-web/dharmastay.git
+Sukurk automobilių nuomos puslapį, kuris vadinasi rentivo. Puslapyje turi galėti pasirinkti auto paėmimo vietą, datą nuo, data iki. Pagal dienų skaičių turi būti atfiltruojami laisvi nuomoje esantys automobiliai. Kol nesuvedi datų turi būti matomi visi automobiliI
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://dharmastay.lovable.app
+
 ## Build with Lovable
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/a798f130-9351-4025-9aa0-aa04dbe8a8f8).
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/3b144e50-7336-4c5e-a93d-7aeca70328ba).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.
