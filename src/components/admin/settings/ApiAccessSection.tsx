@@ -21,32 +21,77 @@ import {
   deleteApiClient,
 } from "@/lib/api-keys.functions";
 
-const LOVABLE_PROJECT_ID = "3b144e50-7336-4c5e-a93d-7aeca70328ba";
 const API_PATH = "/api/public/v1";
+const UUID_RE = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
 
-const BASE_URLS = [
-  {
-    envVar: "RENTIVO_API_URL_PROD",
-    label: "Gamybinė aplinka (publikuota versija)",
-    url: `https://dharmastay.lovable.app${API_PATH}`,
-    hint: "Šį adresą naudoja realūs klientai.",
-    alt: {
-      label: "Alternatyva — stabilus techninis adresas (nesikeis pervadinus projektą)",
-      url: `https://project--${LOVABLE_PROJECT_ID}.lovable.app${API_PATH}`,
-    },
-  },
-  {
-    envVar: "RENTIVO_API_URL_DEV",
-    label: "Testavimo (peržiūros) aplinka",
-    url: `https://project--${LOVABLE_PROJECT_ID}-dev.lovable.app${API_PATH}`,
-    hint: "Privalo turėti „-dev“. Be jo testai rašys į realius duomenis.",
-  },
-] as const;
+/** Lovable projekto ID nuskaitomas iš dabartinio adreso (preview / project / dev). */
+function detectProjectId(): string | null {
+  if (typeof window === "undefined") return null;
+  const m = UUID_RE.exec(window.location.hostname);
+  return m ? m[0] : null;
+}
+
+/** Publikuotas (arba custom domain) adresas — kai atidaryta ne iš peržiūros lango. */
+function detectPublishedOrigin(): string | null {
+  if (typeof window === "undefined") return null;
+  const host = window.location.hostname;
+  if (host.includes("-preview--") || host.endsWith("-dev.lovable.app")) return null;
+  if (host === "localhost" || host === "127.0.0.1") return null;
+  return window.location.origin;
+}
+
+type BaseUrlItem = {
+  envVar: string;
+  label: string;
+  url: string;
+  hint: string;
+  alt?: { label: string; url: string };
+};
+
+function buildBaseUrls(): BaseUrlItem[] {
+  const projectId = detectProjectId();
+  const published = detectPublishedOrigin();
+  const stableProd = projectId ? `https://project--${projectId}.lovable.app${API_PATH}` : null;
+  const stableDev = projectId ? `https://project--${projectId}-dev.lovable.app${API_PATH}` : null;
+
+  const items: BaseUrlItem[] = [];
+
+  const prodUrl = published ? `${published}${API_PATH}` : stableProd;
+  if (prodUrl) {
+    items.push({
+      envVar: "RENTIVO_API_URL_PROD",
+      label: "Gamybinė aplinka (publikuota versija)",
+      url: prodUrl,
+      hint: "Šį adresą naudoja realūs klientai.",
+      ...(published && stableProd && stableProd !== prodUrl
+        ? {
+            alt: {
+              label:
+                "Alternatyva — stabilus techninis adresas (nesikeis pervadinus projektą)",
+              url: stableProd,
+            },
+          }
+        : {}),
+    });
+  }
+
+  if (stableDev) {
+    items.push({
+      envVar: "RENTIVO_API_URL_DEV",
+      label: "Testavimo (peržiūros) aplinka",
+      url: stableDev,
+      hint: "Privalo turėti „-dev“. Be jo testai rašys į realius duomenis.",
+    });
+  }
+
+  return items;
+}
 
 function isPreviewWindow(): boolean {
   if (typeof window === "undefined") return false;
   return !window.location.origin.includes(".lovable.app");
 }
+
 
 export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
   const qc = useQueryClient();
