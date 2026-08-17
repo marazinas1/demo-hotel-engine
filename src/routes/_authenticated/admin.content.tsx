@@ -18,6 +18,7 @@ import {
 } from "@/lib/content-templates";
 import { ContentTemplateCard } from "@/components/admin/content/ContentTemplateCard";
 import {
+import { APP_ADMIN_NAME } from "@/lib/branding";
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -32,13 +33,13 @@ export const Route = createFileRoute("/_authenticated/admin/content")({
   component: ContentPage,
   head: () => ({
     meta: [
-      { title: "Turinys · Rentivo Admin" },
+      { title: `Turinys · ${APP_ADMIN_NAME}` },
       {
         name: "description",
         content:
           "Klientams siunčiamų el. laiškų, WhatsApp žinučių ir svečiams skirtos informacijos šablonų valdymas.",
       },
-      { property: "og:title", content: "Turinys · Rentivo Admin" },
+      { property: "og:title", content: `Turinys · ${APP_ADMIN_NAME}` },
       {
         property: "og:description",
         content: "El. laiškų, WhatsApp žinučių ir svečių informacijos šablonai vienoje vietoje.",

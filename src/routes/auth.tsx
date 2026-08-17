@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
+import { APP_NAME } from "@/lib/branding";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Prisijungimas | Rentivo" }] }),
+  head: () => ({ meta: [{ title: `Prisijungimas | ${APP_NAME}` }] }),
   component: LoginPage,
 });
 

@@ -59,7 +59,7 @@ function buildBaseUrls(): BaseUrlItem[] {
   const prodUrl = published ? `${published}${API_PATH}` : stableProd;
   if (prodUrl) {
     items.push({
-      envVar: "RENTIVO_API_URL_PROD",
+      envVar: "HOTEL_ENGINE_API_URL_PROD",
       label: "Gamybinė aplinka (publikuota versija)",
       url: prodUrl,
       hint: "Šį adresą naudoja realūs klientai.",
@@ -77,7 +77,7 @@ function buildBaseUrls(): BaseUrlItem[] {
 
   if (stableDev) {
     items.push({
-      envVar: "RENTIVO_API_URL_DEV",
+      envVar: "HOTEL_ENGINE_API_URL_DEV",
       label: "Testavimo (peržiūros) aplinka",
       url: stableDev,
       hint: "Privalo turėti „-dev“. Be jo testai rašys į realius duomenis.",

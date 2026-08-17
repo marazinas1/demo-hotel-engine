@@ -48,13 +48,13 @@
     "view": "View"
   },
   "why": {
-    "title": "Why choose Rentivo?",
+    "title": "Why choose Hotel Engine?",
     "insurance": { "title": "CASCO and third-party liability insurance", "text": "All cars are insured — drive worry-free, and with the full protection package there is no deductible." },
     "prices": { "title": "Transparent prices", "text": "No hidden fees. You see the final price upfront." },
     "support": { "title": "24/7 support", "text": "Roadside assistance and a replacement car in case of breakdown or accident." }
   },
   "footer": {
-    "rights": "© {{year}} Rentivo. All rights reserved.",
+    "rights": "© {{year}} Hotel Engine. All rights reserved.",
     "whatsapp": "WhatsApp",
     "call": "Call",
     "privacyPolicy": "Privacy Policy",
@@ -150,7 +150,7 @@
   },
   "faq": {
     "title": "Terms & FAQ",
-    "subtitle": "Frequently asked questions about renting cars with Rentivo.",
+    "subtitle": "Frequently asked questions about renting cars with Hotel Engine.",
     "items": [
       { "q": "What documents are required for rental?", "a": "A valid driver's license (at least 2 years of experience) and an identity document (passport or ID card)." },
       { "q": "What is the minimum driver age?", "a": "Drivers must be at least 21 years old. Some cars (Premium, SUV) may require a higher age." },
@@ -163,9 +163,9 @@
     ]
   },
   "about": {
-    "title": "About Rentivo",
-    "lead": "We are Rentivo — a car rental team that cares about every kilometer of your trip.",
-    "story": "Rentivo was born from a simple idea — to make car rental in Lithuania transparent, fast, and free from hidden fees. Over several years we have served thousands of customers across the country and keep growing our fleet.",
+    "title": "About Hotel Engine",
+    "lead": "We are Hotel Engine — a car rental team that cares about every kilometer of your trip.",
+    "story": "Hotel Engine was born from a simple idea — to make car rental in Lithuania transparent, fast, and free from hidden fees. Over several years we have served thousands of customers across the country and keep growing our fleet.",
     "values": "Our values",
     "valuesList": [
       { "title": "Transparency", "text": "You see the final price before booking — no hidden fees." },
@@ -203,7 +203,7 @@
   },
   "news": {
     "title": "News",
-    "subtitle": "Latest Rentivo updates, promotions and useful tips.",
+    "subtitle": "Latest Hotel Engine updates, promotions and useful tips.",
     "items": [
       { "date": "2026-05-15", "title": "New car in the fleet", "text": "", "excerpt": "We're introducing a new family-class car, already available to book on our site." },
       { "date": "2026-04-02", "title": "Summer season offers", "text": "", "excerpt": "We've updated summer pricing — check out discounts for longer rentals." },
@@ -231,7 +231,7 @@
     },
     "seo": {
       "h1": "Car rental services in the port city and region",
-      "p1": "Looking for reliable, comfortable transport on the coast? Renting a car in Klaipėda and at Palanga Airport with Rentivo is a fast, flexible solution for business trips and seaside getaways alike. We understand that your journey needs more than just a means of transport — it needs a technically sound, safe, and presentable car. Skip public transport timetables and expensive taxis, and take control of your time from your very first minute on the coast.",
+      "p1": "Looking for reliable, comfortable transport on the coast? Renting a car in Klaipėda and at Palanga Airport with Hotel Engine is a fast, flexible solution for business trips and seaside getaways alike. We understand that your journey needs more than just a means of transport — it needs a technically sound, safe, and presentable car. Skip public transport timetables and expensive taxis, and take control of your time from your very first minute on the coast.",
       "plq": {
         "title": "Car rental at Palanga Airport (PLQ) — a convenient start",
         "intro": "Arriving on the coast by plane? Renting a car at Palanga Airport lets you avoid logistics headaches the moment you land.",
@@ -243,14 +243,14 @@
       },
       "replacement": {
         "title": "Replacement car: a solution after an accident or during repairs",
-        "intro": "Has your daily routine come to a halt because your personal car has broken down or been in a traffic accident? Rentivo offers a fast solution for residents of Klaipėda and the region — a replacement car rental.",
+        "intro": "Has your daily routine come to a halt because your personal car has broken down or been in a traffic accident? Hotel Engine offers a fast solution for residents of Klaipėda and the region — a replacement car rental.",
         "items": [
           { "title": "Rental during service", "text": "Don't put your plans on hold while your car is being repaired at the workshop. Rent a comfortable car for the entire repair period." },
           { "title": "Replacement car after a traffic accident", "text": "If you were the victim in a traffic accident, in most cases the cost of the replacement car is covered by the insurance company (under TPVCAPD). We provide all the required invoices and rental agreements so declaring the costs to the insurer goes smoothly." }
         ]
       },
       "why": {
-        "title": "Why choose Rentivo car rental?",
+        "title": "Why choose Hotel Engine car rental?",
         "items": [
           { "title": "Premium-class comfort", "text": "Our fleet features technically sound, dynamic, and comfortable German cars (BMW, Mercedes-Benz, Volkswagen models) that deliver maximum driving pleasure." },
           { "title": "Perfect technical condition", "text": "Every vehicle is regularly maintained, clean, and ready for short trips around the city as well as long journeys." },

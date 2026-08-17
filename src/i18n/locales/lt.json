@@ -48,13 +48,13 @@
     "view": "Peržiūrėti"
   },
   "why": {
-    "title": "Kodėl rinktis Rentivo?",
+    "title": "Kodėl rinktis Hotel Engine?",
     "insurance": { "title": "KASKO ir Civilinis draudimas", "text": "Visi nuomojami automobiliai yra apdrausti privalomuoju transporto priemonių valdytojų civilinės atsakomybės draudimu (TPVCA).\n\nPageidaujant galima pasirinkti KASKO draudimo apsaugą su 0 Eur išskaita." },
     "prices": { "title": "Skaidrios kainos", "text": "Jokių paslėptų mokesčių. Matote galutinę kainą iškart." },
     "support": { "title": "24/7 pagalba", "text": "Pagalba kelyje ir pakaitinis automobilis gedimo ar avarijos atveju." }
   },
   "footer": {
-    "rights": "© {{year}} Rentivo. Visos teisės saugomos.",
+    "rights": "© {{year}} Hotel Engine. Visos teisės saugomos.",
     "whatsapp": "WhatsApp",
     "call": "Skambinti",
     "privacyPolicy": "Privatumo politika",
@@ -150,7 +150,7 @@
   },
   "faq": {
     "title": "Sąlygos ir D.U.K.",
-    "subtitle": "Dažniausiai užduodami klausimai apie automobilių nuomą Rentivo.",
+    "subtitle": "Dažniausiai užduodami klausimai apie automobilių nuomą Hotel Engine.",
     "items": [
       { "q": "Kokie dokumentai reikalingi nuomai?", "a": "Galiojantis vairuotojo pažymėjimas (ne mažiau kaip 2 metų stažas) bei asmens tapatybės dokumentas (pasas arba ID kortelė)." },
       { "q": "Koks minimalus vairuotojo amžius?", "a": "Vairuotojas turi būti ne jaunesnis nei 21 metų. Kai kuriems automobiliams (Premium, SUV) gali būti taikomas didesnis amžiaus reikalavimas." },
@@ -163,9 +163,9 @@
     ]
   },
   "about": {
-    "title": "Apie Rentivo",
-    "lead": "Mes — Rentivo — automobilių nuomos komanda, kuriai svarbu kiekvienas Jūsų kelionės kilometras.",
-    "story": "Rentivo gimė iš paprastos idėjos — padaryti automobilių nuomą Lietuvoje skaidrią, greitą ir be paslėptų mokesčių. Per keletą veiklos metų aptarnavome tūkstančius klientų visoje Lietuvoje ir nuolat plečiame savo automobilių parką.",
+    "title": "Apie Hotel Engine",
+    "lead": "Mes — Hotel Engine — automobilių nuomos komanda, kuriai svarbu kiekvienas Jūsų kelionės kilometras.",
+    "story": "Hotel Engine gimė iš paprastos idėjos — padaryti automobilių nuomą Lietuvoje skaidrią, greitą ir be paslėptų mokesčių. Per keletą veiklos metų aptarnavome tūkstančius klientų visoje Lietuvoje ir nuolat plečiame savo automobilių parką.",
     "values": "Mūsų vertybės",
     "valuesList": [
       { "title": "Skaidrumas", "text": "Galutinę kainą matote dar prieš rezervaciją — be paslėptų mokesčių." },
@@ -203,7 +203,7 @@
   },
   "news": {
     "title": "Naujienos",
-    "subtitle": "Naujausi Rentivo įvykiai, akcijos ir naudingi patarimai.",
+    "subtitle": "Naujausi Hotel Engine įvykiai, akcijos ir naudingi patarimai.",
     "items": [
       { "date": "2026-05-15", "title": "Naujas automobilis parke", "text": "", "excerpt": "Pristatome naują šeimos klasės automobilį, kurį jau galima rezervuoti per mūsų svetainę." },
       { "date": "2026-04-02", "title": "Vasaros sezono pasiūlymai", "text": "", "excerpt": "Atnaujinome vasaros sezono kainas — sužinokite apie nuolaidas ilgesnei nuomai." },
@@ -231,7 +231,7 @@
     },
     "seo": {
       "h1": "Automobilių nuomos paslaugos uostamiestyje ir regione",
-      "p1": "Ieškote patikimo ir komfortiško transporto pajūryje? Automobilių nuoma Klaipėdoje ir Palangos oro uoste su „Rentivo“ – tai greitas ir lankstus sprendimas tiek verslo kelionėms, tiek poilsiui prie jūros. Mes suprantame, kad kelionės tikslas reikalauja ne tiesiog judėjimo priemonės, o techniškai tvarkingo, saugaus ir reprezentatyvaus automobilio. Atsisakykite viešojo transporto tvarkaraščių ar brangaus taksi – valdykite savo laiką patys nuo pat pirmos minutės pajūryje.",
+      "p1": "Ieškote patikimo ir komfortiško transporto pajūryje? Automobilių nuoma Klaipėdoje ir Palangos oro uoste su „Hotel Engine“ – tai greitas ir lankstus sprendimas tiek verslo kelionėms, tiek poilsiui prie jūros. Mes suprantame, kad kelionės tikslas reikalauja ne tiesiog judėjimo priemonės, o techniškai tvarkingo, saugaus ir reprezentatyvaus automobilio. Atsisakykite viešojo transporto tvarkaraščių ar brangaus taksi – valdykite savo laiką patys nuo pat pirmos minutės pajūryje.",
       "plq": {
         "title": "Automobilių nuoma Palangos oro uoste (PLQ) – patogus startas",
         "intro": "Atvykstate į pajūrį lėktuvu? Automobilių nuoma Palangos oro uoste leidžia išvengti logistikos rūpesčių vos nusileidus.",
@@ -243,14 +243,14 @@
       },
       "replacement": {
         "title": "Pakaitinis automobilis: išeitis po avarijos ar remonto metu",
-        "intro": "Sustojo įprastas gyvenimo ritmas, nes jūsų asmeninė transporto priemonė sugedo arba patekote į eismo įvykį? „Rentivo“ siūlo operatyvų sprendimą vietiniams Klaipėdos ir regiono gyventojams – pakaitinio automobilio nuomą.",
+        "intro": "Sustojo įprastas gyvenimo ritmas, nes jūsų asmeninė transporto priemonė sugedo arba patekote į eismo įvykį? „Hotel Engine“ siūlo operatyvų sprendimą vietiniams Klaipėdos ir regiono gyventojams – pakaitinio automobilio nuomą.",
         "items": [
           { "title": "Nuoma serviso metu", "text": "Nepalikite savo planų nuošalyje, kol jūsų automobilis yra remontuojamas autoservise. Išsinuomokite komfortišką transportą visam remonto laikotarpiui." },
           { "title": "Pakaitinis automobilis po eismo įvykio", "text": "Jei nukentėjote eismo įvykyje, dažnu atveju pakaitinio automobilio nuomos išlaidas kompensuoja draudimo bendrovės (pagal TPVCAPD). Suteikiame visas reikalingas sąskaitas-faktūras ir nuomos sutartis, kad išlaidų deklaravimas draudimui praeitų sklandžiai." }
         ]
       },
       "why": {
-        "title": "Kodėl verta rinktis „Rentivo“ automobilių nuomą?",
+        "title": "Kodėl verta rinktis „Hotel Engine“ automobilių nuomą?",
         "items": [
           { "title": "Premium klasės komfortas", "text": "Mūsų parke – techniškai tvarkingi, dinamiški ir komfortiški vokiški automobiliai (BMW, Mercedes Benz, Volkswagen modeliai), užtikrinantys maksimalų vairavimo malonumą." },
           { "title": "Ideali techninė būklė", "text": "Kiekviena transporto priemonė yra reguliariai prižiūrima, švari ir paruošta tiek trumpoms distancijoms mieste, tiek ilgoms kelionėms." },
