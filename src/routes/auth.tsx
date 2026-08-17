@@ -121,8 +121,10 @@ function LoginPage() {
           <div className="text-center">
             <Link to="/" className="text-xs text-muted-foreground hover:underline">← Į pradžią</Link>
           </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
+
 }
