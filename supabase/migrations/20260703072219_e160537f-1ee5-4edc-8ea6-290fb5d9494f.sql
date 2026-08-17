@@ -1,1 +1,0 @@
-REVOKE EXECUTE ON FUNCTION public.cancel_expired_pending_bookings() FROM PUBLIC, anon, authenticated;

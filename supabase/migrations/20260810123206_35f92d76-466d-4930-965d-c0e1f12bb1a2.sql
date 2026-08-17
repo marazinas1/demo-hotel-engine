@@ -1,1 +1,0 @@
-ALTER TABLE public.property_settings ADD COLUMN IF NOT EXISTS review_link text;

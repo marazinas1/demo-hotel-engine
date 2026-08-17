@@ -1,1 +1,0 @@
-ALTER TABLE public.properties ADD COLUMN IF NOT EXISTS door_code TEXT;

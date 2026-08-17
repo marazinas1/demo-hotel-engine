@@ -1,1 +1,0 @@
-REVOKE EXECUTE ON FUNCTION public.bump_car_mileage_from_booking() FROM PUBLIC, anon, authenticated;
