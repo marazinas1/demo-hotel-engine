@@ -103,6 +103,11 @@ export function ApiAccessSection({ canEdit }: { canEdit: boolean }) {
   const [name, setName] = useState("");
   const [origins, setOrigins] = useState("");
   const [newKey, setNewKey] = useState<string | null>(null);
+  const [baseUrls, setBaseUrls] = useState<BaseUrlItem[]>([]);
+
+  // Adresai priklauso nuo naršyklės adreso — skaičiuojame tik po hidratacijos.
+  useEffect(() => setBaseUrls(buildBaseUrls()), []);
+
 
   const { data: clients, isLoading } = useQuery({
     queryKey: ["api-clients"],
