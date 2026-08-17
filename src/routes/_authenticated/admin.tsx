@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Home, Calendar, FileText, Wallet, LayoutDashboard, Globe, LogOut, Building2, Settings2, FileEdit } from "lucide-react";
 import { getMyRole } from "@/lib/properties.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { APP_ADMIN_NAME, MARKETING_SITE_URL } from "@/lib/branding";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminLayout,
@@ -50,7 +51,7 @@ function AdminLayout() {
       <aside className="flex w-60 shrink-0 flex-col border-r bg-card">
         <div className="flex items-center gap-2 px-4 py-4 font-semibold">
           <Building2 className="h-5 w-5 text-primary" />
-          <span>Rentivo Admin</span>
+          <span>{APP_ADMIN_NAME}</span>
         </div>
         <nav className="flex-1 space-y-1 px-2">
           {links.map((l) => {
@@ -74,7 +75,7 @@ function AdminLayout() {
         </nav>
         <div className="mt-auto space-y-1 border-t px-2 py-3">
           <a
-            href="https://dharma.revoo.lt/"
+            href={MARKETING_SITE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"

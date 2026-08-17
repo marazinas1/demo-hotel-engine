@@ -29,9 +29,10 @@ import {
   List as ListIcon, ListOrdered, Pilcrow,
 } from "lucide-react";
 import { toast } from "sonner";
+import { APP_ADMIN_NAME } from "@/lib/branding";
 
 export const Route = createFileRoute("/_authenticated/admin/contracts")({
-  head: () => ({ meta: [{ title: "Sutartys | Dharma Stay Admin" }] }),
+  head: () => ({ meta: [{ title: `Sutartys | ${APP_ADMIN_NAME}` }] }),
   component: ContractsPage,
 });
 

@@ -22,17 +22,18 @@ import {
 import { ApiAccessSection } from "@/components/admin/settings/ApiAccessSection";
 import { EmailTestSection } from "@/components/admin/settings/EmailTestSection";
 import { UsersSection } from "@/components/admin/settings/UsersSection";
+import { APP_ADMIN_NAME } from "@/lib/branding";
 export const Route = createFileRoute("/_authenticated/admin/settings")({
   component: PropertySettingsPage,
   head: () => ({
     meta: [
-      { title: "Bendrieji nustatymai · Rentivo Admin" },
+      { title: `Bendrieji nustatymai · ${APP_ADMIN_NAME}` },
       {
         name: "description",
         content:
           "Objekto bendrieji nustatymai: viešnagės taisyklės, mokesčiai, mokėjimai, sąskaitos, pranešimai ir integracijos.",
       },
-      { property: "og:title", content: "Bendrieji nustatymai · Rentivo Admin" },
+      { property: "og:title", content: `Bendrieji nustatymai · ${APP_ADMIN_NAME}` },
       {
         property: "og:description",
         content: "Centrinė objekto konfigūracijos vieta viešbučių valdymo sistemoje.",

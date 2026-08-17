@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
+import { APP_NAME } from "@/lib/branding";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Prisijungimas | Rentivo" }] }),
+  head: () => ({ meta: [{ title: `Prisijungimas | ${APP_NAME}` }] }),
   component: LoginPage,
 });
 
@@ -68,18 +69,26 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen grid place-items-center bg-background px-4">
-      <Card className="w-full max-w-md">
-        <CardContent className="p-6 space-y-5">
-          <div>
-            <h1 className="text-2xl font-bold">
-              {mode === "login" ? "Prisijungimas" : "Slaptažodžio atstatymas"}
-            </h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              {mode === "forgot"
-                ? "Įvesk el. paštą — atsiųsime nuorodą naujam slaptažodžiui nustatyti."
-                : "Prieiga tik pakviestiems vartotojams."}
-            </p>
-          </div>
+      <div className="w-full max-w-md space-y-6">
+        <div className="flex items-center justify-center gap-3">
+          <img src="/favicon.svg" alt="" width={36} height={36} className="rounded-lg" />
+          <span className="text-2xl font-semibold tracking-tight text-foreground">
+            {APP_NAME}
+          </span>
+        </div>
+        <Card className="w-full">
+          <CardContent className="p-6 space-y-5">
+            <div>
+              <h1 className="text-2xl font-bold">
+                {mode === "login" ? "Prisijungimas" : "Slaptažodžio atstatymas"}
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1">
+                {mode === "forgot"
+                  ? "Įvesk el. paštą — atsiųsime nuorodą naujam slaptažodžiui nustatyti."
+                  : "Prieiga tik pakviestiems vartotojams."}
+              </p>
+            </div>
+
           <form onSubmit={submit} className="space-y-3">
             <div className="space-y-1.5">
               <Label htmlFor="email">El. paštas</Label>
@@ -112,8 +121,10 @@ function LoginPage() {
           <div className="text-center">
             <Link to="/" className="text-xs text-muted-foreground hover:underline">← Į pradžią</Link>
           </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
+
 }

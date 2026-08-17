@@ -1,3 +1,4 @@
+import { APP_NAME } from "@/lib/branding";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
@@ -34,7 +35,7 @@ export const requestPasswordReset = createServerFn({ method: "POST" })
       const { sendEmail } = await import("@/lib/notifications.server");
       await sendEmail({
         to: data.email,
-        subject: "Slaptažodžio atstatymas — Dharma Stay",
+        subject: `Slaptažodžio atstatymas — ${APP_NAME}`,
         html: `
           <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#111;line-height:1.6">
             <p>Sveiki,</p>

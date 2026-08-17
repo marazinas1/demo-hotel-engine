@@ -1,16 +1,36 @@
-/** Kanoninis administravimo sistemos adresas — naudojamas laiškų nuorodose. */
-export const APP_BASE_URL = "https://admin.dharma.revoo.lt";
+/**
+ * Šio projekto bazinis adresas laiškų nuorodoms.
+ * Pirmenybė — vykdymo aplinkos / užklausos kilmė, kad adresas liktų teisingas
+ * peržiūroje, gamyboje ir po pervadinimo. Konstanta naudojama tik kaip atsarga.
+ */
+export const APP_BASE_URL_FALLBACK = "https://demo-hotel-engine.lovable.app";
+
+function envBaseUrl(): string | null {
+  const candidates = [
+    process.env["APP_BASE_URL"],
+    process.env["VITE_APP_BASE_URL"],
+    process.env["PUBLIC_APP_URL"],
+  ];
+  for (const c of candidates) {
+    if (!c) continue;
+    try {
+      return new URL(c).origin;
+    } catch {
+      /* ignore */
+    }
+  }
+  return null;
+}
 
 /**
- * Grąžina nuorodą į kanoninį prodo adresą.
- * Kliento perduotas origin naudojamas tik lokaliam dev (localhost).
+ * Grąžina absoliučią nuorodą į šią programą.
+ * Naudoja užklausos origin (tas pats diegimas), tada aplinkos kintamąjį, tada atsargą.
  */
 export function appLink(path: string, requestedOrigin?: string): string {
-  let base = APP_BASE_URL;
+  let base = envBaseUrl() ?? APP_BASE_URL_FALLBACK;
   if (requestedOrigin) {
     try {
-      const u = new URL(requestedOrigin);
-      if (u.hostname === "localhost" || u.hostname === "127.0.0.1") base = u.origin;
+      base = new URL(requestedOrigin).origin;
     } catch {
       /* ignore */
     }
