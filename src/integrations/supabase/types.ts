@@ -348,6 +348,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      __tmp_apply_migration: { Args: { sql: string }; Returns: undefined }
       get_car_booked_dates: {
         Args: { _car_id: string }
         Returns: {
